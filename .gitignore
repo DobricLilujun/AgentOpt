@@ -1,1 +1,16 @@
-*.csv
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Real data is large (744MB) — keep it local, not in git.
+# The CSV stays on disk; only code, reports, and small results are tracked.
+monitoring_PSEM_brute.csv
+
+# Large / generated outputs (keep small JSON in results/ but not huge CSVs)
+resource/data/
+
+# OS / editor
+.DS_Store
+*.swp
