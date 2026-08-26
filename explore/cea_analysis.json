@@ -1,0 +1,121 @@
+{
+  "baseline": {
+    "status": "optimal",
+    "feasible": true,
+    "n_clusters": 11,
+    "cost": 23658.44,
+    "deploy_cost": 158,
+    "leak_kg": 0.0022,
+    "n_violations": 0,
+    "tasks": 48,
+    "cost_reduction": 0.7007575757575757
+  },
+  "findings": [
+    {
+      "constraint": "group_affinity",
+      "feasible": false,
+      "cost": 100000000.0,
+      "delta_cost": null,
+      "interesting": {
+        "interesting": true,
+        "type": "infeasible",
+        "delta_cost": null,
+        "delta_clusters": null
+      }
+    },
+    {
+      "constraint": "group_capacity",
+      "feasible": true,
+      "cost": 27658.44,
+      "delta_cost": 4000.0,
+      "interesting": {
+        "interesting": true,
+        "type": "hurts",
+        "delta_cost": 4000.0,
+        "delta_clusters": 0
+      }
+    },
+    {
+      "constraint": "advance_cap",
+      "feasible": true,
+      "cost": 23658.44,
+      "delta_cost": 0.0,
+      "interesting": {
+        "interesting": false,
+        "type": "neutral",
+        "delta_cost": 0.0,
+        "delta_clusters": 0
+      }
+    },
+    {
+      "constraint": "delay_cap",
+      "feasible": true,
+      "cost": 17658.44,
+      "delta_cost": -6000.0,
+      "interesting": {
+        "interesting": true,
+        "type": "helps",
+        "delta_cost": -6000.0,
+        "delta_clusters": 0
+      }
+    },
+    {
+      "constraint": "cohesion",
+      "feasible": false,
+      "cost": 100000000.0,
+      "delta_cost": null,
+      "interesting": {
+        "interesting": true,
+        "type": "infeasible",
+        "delta_cost": null,
+        "delta_clusters": null
+      }
+    },
+    {
+      "constraint": "spread",
+      "feasible": true,
+      "cost": 23658.44,
+      "delta_cost": 0.0,
+      "interesting": {
+        "interesting": false,
+        "type": "neutral",
+        "delta_cost": 0.0,
+        "delta_clusters": 0
+      }
+    },
+    {
+      "constraint": "early_first",
+      "feasible": true,
+      "cost": 24158.44,
+      "delta_cost": 500.0,
+      "interesting": {
+        "interesting": true,
+        "type": "hurts",
+        "delta_cost": 500.0,
+        "delta_clusters": 0
+      }
+    }
+  ],
+  "interesting": [
+    "group_affinity",
+    "group_capacity",
+    "advance_cap",
+    "delay_cap",
+    "cohesion",
+    "spread",
+    "early_first"
+  ],
+  "infeasible": [
+    "group_affinity",
+    "cohesion"
+  ],
+  "interesting_type": {
+    "group_affinity": "infeasible",
+    "group_capacity": "hurts",
+    "advance_cap": "neutral",
+    "delay_cap": "helps",
+    "cohesion": "infeasible",
+    "spread": "neutral",
+    "early_first": "hurts"
+  }
+}

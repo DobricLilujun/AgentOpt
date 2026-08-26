@@ -1,0 +1,15 @@
+
+BEST constraint set: delay_cap
+  metrics: {'status': 'optimal', 'feasible': True, 'n_clusters': 11, 'cost': np.float64(17658.44), 'deploy_cost': 158, 'leak_kg': 0.0022, 'n_violations': 0, 'tasks': 48, 'cost_reduction': 0.7007575757575757}
+  gen 0: fitness=17658 set=delay_cap
+  gen 1: fitness=17658 set=delay_cap
+  gen 2: fitness=17658 set=delay_cap
+  gen 3: fitness=17658 set=delay_cap
+  gen 4: fitness=17658 set=delay_cap
+  gen 5: fitness=17658 set=delay_cap
+  gen 6: fitness=17658 set=delay_cap
+  gen 7: fitness=17658 set=delay_cap
+  gen 8: fitness=17658 set=delay_cap
+  gen 9: fitness=17658 set=delay_cap
+
+saved explore/cea_result.json

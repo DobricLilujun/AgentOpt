@@ -1,0 +1,194 @@
+{
+  "best_set": "delay_cap",
+  "best_metrics": {
+    "status": "optimal",
+    "feasible": true,
+    "n_clusters": 11,
+    "cost": 17658.44,
+    "deploy_cost": 158,
+    "leak_kg": 0.0022,
+    "n_violations": 0,
+    "tasks": 48,
+    "cost_reduction": 0.7007575757575757
+  },
+  "history": [
+    {
+      "gen": 0,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 1,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 2,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 3,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 4,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 5,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 6,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 7,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 8,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    },
+    {
+      "gen": 9,
+      "best_fitness": 17658.44,
+      "best_metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      },
+      "best_set": "delay_cap"
+    }
+  ],
+  "memory": [
+    {
+      "gen": 0,
+      "set": "delay_cap",
+      "metrics": {
+        "status": "optimal",
+        "feasible": true,
+        "n_clusters": 11,
+        "cost": 17658.44,
+        "deploy_cost": 158,
+        "leak_kg": 0.0022,
+        "n_violations": 0,
+        "tasks": 48,
+        "cost_reduction": 0.7007575757575757
+      }
+    }
+  ],
+  "elapsed": 28.74745798110962
+}
