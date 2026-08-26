@@ -10,6 +10,7 @@ monitoring_PSEM_brute.csv
 
 # Large / generated outputs (keep small JSON in results/ but not huge CSVs)
 resource/data/
+results/*.log
 
 # OS / editor
 .DS_Store

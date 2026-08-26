@@ -1,0 +1,92 @@
+{
+  "30": {
+    "n_tasks": 48,
+    "no_grouping": {
+      "method": "No-grouping",
+      "n_clusters": 21,
+      "n_tasks": 48,
+      "cost": 210,
+      "cost_base": 480,
+      "cost_reduction": 0.5625,
+      "leakage_kg": 0.0,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 0.0,
+      "delay": 0.0,
+      "fitness": 210.0
+    },
+    "paper_ilp": {
+      "method": "ILP",
+      "n_clusters": 10,
+      "n_tasks": 48,
+      "cost": 100,
+      "cost_base": 480,
+      "cost_reduction": 0.7916666666666666,
+      "leakage_kg": 0.0007542876791287595,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 7.0,
+      "delay": 41.0,
+      "fitness": 100.75428767912877
+    },
+    "multi_agent": {
+      "method": "Greedy",
+      "n_clusters": 6,
+      "n_tasks": 48,
+      "cost": 60,
+      "cost_base": 480,
+      "cost_reduction": 0.875,
+      "leakage_kg": 0.0008572131749338152,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 6.0,
+      "delay": 41.0,
+      "fitness": 25.89792517017265
+    }
+  },
+  "90": {
+    "n_tasks": 204,
+    "no_grouping": {
+      "method": "No-grouping",
+      "n_clusters": 77,
+      "n_tasks": 204,
+      "cost": 770,
+      "cost_base": 2040,
+      "cost_reduction": 0.6225490196078431,
+      "leakage_kg": 0.0,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 0.0,
+      "delay": 0.0,
+      "fitness": 770.0
+    },
+    "paper_ilp": {
+      "method": "ILP",
+      "n_clusters": 41,
+      "n_tasks": 204,
+      "cost": 410,
+      "cost_base": 2040,
+      "cost_reduction": 0.7990196078431373,
+      "leakage_kg": 0.004089237868157162,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 35.0,
+      "delay": 159.0,
+      "fitness": 414.08923786815717
+    },
+    "multi_agent": {
+      "method": "ILP",
+      "n_clusters": 6,
+      "n_tasks": 204,
+      "cost": 60,
+      "cost_base": 2040,
+      "cost_reduction": 0.9705882352941176,
+      "leakage_kg": 0.0,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 18.0,
+      "delay": 0.0,
+      "fitness": 25.465746122145802
+    }
+  }
+}

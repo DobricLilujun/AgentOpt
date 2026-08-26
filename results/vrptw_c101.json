@@ -1,0 +1,230 @@
+{
+  "instance": "C101",
+  "n_customers": 100,
+  "n_vehicles_given": 25,
+  "capacity": 200,
+  "no_grouping": {
+    "method": "No-grouping",
+    "n_vehicles": 100,
+    "violations": 0
+  },
+  "paper_ilp": {
+    "method": "ILP",
+    "status": "Optimal",
+    "n_vehicles": 15,
+    "assignment": {
+      "1": 916,
+      "2": 867,
+      "3": 65,
+      "4": 771,
+      "5": 65,
+      "6": 669,
+      "7": 203,
+      "8": 293,
+      "9": 578,
+      "10": 396,
+      "11": 485,
+      "12": 669,
+      "13": 65,
+      "14": 578,
+      "15": 404,
+      "16": 511,
+      "17": 109,
+      "18": 203,
+      "19": 293,
+      "20": 65,
+      "21": 916,
+      "22": 867,
+      "23": 771,
+      "24": 65,
+      "25": 213,
+      "26": 669,
+      "27": 293,
+      "28": 578,
+      "29": 396,
+      "30": 485,
+      "31": 203,
+      "32": 65,
+      "33": 109,
+      "34": 771,
+      "35": 293,
+      "36": 669,
+      "37": 396,
+      "38": 485,
+      "39": 578,
+      "40": 293,
+      "41": 203,
+      "42": 109,
+      "43": 65,
+      "44": 396,
+      "45": 578,
+      "46": 485,
+      "47": 1055,
+      "48": 669,
+      "49": 1055,
+      "50": 867,
+      "51": 771,
+      "52": 916,
+      "53": 293,
+      "54": 213,
+      "55": 109,
+      "56": 396,
+      "57": 65,
+      "58": 485,
+      "59": 669,
+      "60": 578,
+      "61": 578,
+      "62": 293,
+      "63": 203,
+      "64": 669,
+      "65": 109,
+      "66": 867,
+      "67": 65,
+      "68": 771,
+      "69": 916,
+      "70": 396,
+      "71": 293,
+      "72": 485,
+      "73": 485,
+      "74": 404,
+      "75": 1055,
+      "76": 203,
+      "77": 578,
+      "78": 109,
+      "79": 669,
+      "80": 771,
+      "81": 109,
+      "82": 396,
+      "83": 293,
+      "84": 485,
+      "85": 578,
+      "86": 203,
+      "87": 109,
+      "88": 669,
+      "89": 771,
+      "90": 65,
+      "91": 867,
+      "92": 396,
+      "93": 511,
+      "94": 293,
+      "95": 203,
+      "96": 109,
+      "97": 578,
+      "98": 65,
+      "99": 771,
+      "100": 669
+    },
+    "violations": 0
+  },
+  "multi_agent": {
+    "best_strategy": {
+      "method": "ilp",
+      "C_max": 200,
+      "advance_limit": 0,
+      "safety_margin": 0,
+      "advance_prefer": 0.0,
+      "w_cost": 1.0,
+      "w_leak": 1.0,
+      "w_reliability": 5.0
+    },
+    "best_metrics": {
+      "n_vehicles": 92,
+      "capacity": 200,
+      "violations": 0,
+      "fitness": 92.0
+    },
+    "history": [
+      {
+        "gen": 0,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 1,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 2,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 3,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 4,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 5,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 6,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 7,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 8,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      },
+      {
+        "gen": 9,
+        "best_metrics": {
+          "n_vehicles": 92,
+          "capacity": 200,
+          "violations": 0,
+          "fitness": 92.0
+        }
+      }
+    ],
+    "memory": []
+  }
+}

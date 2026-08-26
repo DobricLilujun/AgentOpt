@@ -1,0 +1,489 @@
+{
+  "mode": "llm",
+  "llm_calls": 10,
+  "best_strategy": {
+    "method": "ilp",
+    "C_max": 8,
+    "advance_limit": 5,
+    "safety_margin": 1,
+    "advance_prefer": 1.4091585121567682,
+    "w_cost": 0.4082316481536427,
+    "w_leak": 0.34761971326039326,
+    "w_reliability": 1.5851240467504297
+  },
+  "best_metrics": {
+    "method": "ILP",
+    "n_clusters": 6,
+    "n_tasks": 48,
+    "cost": 60,
+    "cost_base": 480,
+    "cost_reduction": 0.875,
+    "leakage_kg": 0.0008440753995986633,
+    "n_violations": 0,
+    "reliability": 1.0,
+    "advance": 1.0,
+    "delay": 46.0,
+    "fitness": 24.7873161375972
+  },
+  "history": [
+    {
+      "gen": 0,
+      "best_fitness": 75.075,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 15,
+        "n_tasks": 48,
+        "cost": 150,
+        "cost_base": 480,
+        "cost_reduction": 0.6875,
+        "leakage_kg": 2.4999999999999998e-05,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 30.0,
+        "delay": 13.0,
+        "fitness": 75.075
+      },
+      "population_fitness": [
+        75.075,
+        100.754,
+        160.399,
+        180.846,
+        200.023,
+        612.765
+      ]
+    },
+    {
+      "gen": 1,
+      "best_fitness": 49.338310200271664,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 8,
+        "n_tasks": 48,
+        "cost": 80,
+        "cost_base": 480,
+        "cost_reduction": 0.8333333333333334,
+        "leakage_kg": 0.0007922508610115667,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 2.0,
+        "delay": 44.0,
+        "fitness": 49.338310200271664
+      },
+      "population_fitness": [
+        49.338,
+        75.075,
+        84.427,
+        125.898,
+        239.486,
+        414.618
+      ]
+    },
+    {
+      "gen": 2,
+      "best_fitness": 49.338310200271664,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 8,
+        "n_tasks": 48,
+        "cost": 80,
+        "cost_base": 480,
+        "cost_reduction": 0.8333333333333334,
+        "leakage_kg": 0.0007922508610115667,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 2.0,
+        "delay": 44.0,
+        "fitness": 49.338310200271664
+      },
+      "population_fitness": [
+        49.338,
+        76.135,
+        148.772,
+        189.834,
+        310.994,
+        466.459
+      ]
+    },
+    {
+      "gen": 3,
+      "best_fitness": 44.488093388852434,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 7,
+        "n_tasks": 48,
+        "cost": 70,
+        "cost_base": 480,
+        "cost_reduction": 0.8541666666666666,
+        "leakage_kg": 0.0008293644629508111,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 5.0,
+        "delay": 43.0,
+        "fitness": 44.488093388852434
+      },
+      "population_fitness": [
+        44.488,
+        49.338,
+        60.175,
+        79.7,
+        137.653,
+        275.842
+      ]
+    },
+    {
+      "gen": 4,
+      "best_fitness": 42.72867530108461,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 8,
+        "n_tasks": 48,
+        "cost": 80,
+        "cost_base": 480,
+        "cost_reduction": 0.8333333333333334,
+        "leakage_kg": 0.0008048184317315623,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 2.0,
+        "delay": 46.0,
+        "fitness": 42.72867530108461
+      },
+      "population_fitness": [
+        42.729,
+        44.488,
+        58.276,
+        58.627,
+        60.371,
+        401.528
+      ]
+    },
+    {
+      "gen": 5,
+      "best_fitness": 39.831943191766854,
+      "best_metrics": {
+        "method": "Greedy",
+        "n_clusters": 7,
+        "n_tasks": 48,
+        "cost": 70,
+        "cost_base": 480,
+        "cost_reduction": 0.8541666666666666,
+        "leakage_kg": 0.0008390103211889335,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 6.0,
+        "delay": 41.0,
+        "fitness": 39.831943191766854
+      },
+      "population_fitness": [
+        39.832,
+        42.729,
+        42.729,
+        51.531,
+        52.447,
+        340.3
+      ]
+    },
+    {
+      "gen": 6,
+      "best_fitness": 39.831943191766854,
+      "best_metrics": {
+        "method": "Greedy",
+        "n_clusters": 7,
+        "n_tasks": 48,
+        "cost": 70,
+        "cost_base": 480,
+        "cost_reduction": 0.8541666666666666,
+        "leakage_kg": 0.0008390103211889335,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 6.0,
+        "delay": 41.0,
+        "fitness": 39.831943191766854
+      },
+      "population_fitness": [
+        39.832,
+        41.092,
+        41.16,
+        42.386,
+        127.53,
+        281.626
+      ]
+    },
+    {
+      "gen": 7,
+      "best_fitness": 24.7873161375972,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 6,
+        "n_tasks": 48,
+        "cost": 60,
+        "cost_base": 480,
+        "cost_reduction": 0.875,
+        "leakage_kg": 0.0008440753995986633,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 1.0,
+        "delay": 46.0,
+        "fitness": 24.7873161375972
+      },
+      "population_fitness": [
+        24.787,
+        31.49,
+        39.832,
+        127.53,
+        234.547,
+        275.37
+      ]
+    },
+    {
+      "gen": 8,
+      "best_fitness": 24.7873161375972,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 6,
+        "n_tasks": 48,
+        "cost": 60,
+        "cost_base": 480,
+        "cost_reduction": 0.875,
+        "leakage_kg": 0.0008440753995986633,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 1.0,
+        "delay": 46.0,
+        "fitness": 24.7873161375972
+      },
+      "population_fitness": [
+        24.787,
+        32.478,
+        36.875,
+        53.098,
+        234.547,
+        245.822
+      ]
+    },
+    {
+      "gen": 9,
+      "best_fitness": 24.7873161375972,
+      "best_metrics": {
+        "method": "ILP",
+        "n_clusters": 6,
+        "n_tasks": 48,
+        "cost": 60,
+        "cost_base": 480,
+        "cost_reduction": 0.875,
+        "leakage_kg": 0.0008440753995986633,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 1.0,
+        "delay": 46.0,
+        "fitness": 24.7873161375972
+      },
+      "population_fitness": [
+        24.787,
+        27.678,
+        53.098,
+        234.011,
+        292.139,
+        307.83
+      ]
+    }
+  ],
+  "memory": [
+    {
+      "gen": 0,
+      "genome": {
+        "method": "ilp",
+        "C_max": 5,
+        "advance_limit": 3,
+        "safety_margin": 3,
+        "advance_prefer": -0.5,
+        "w_cost": 0.5,
+        "w_leak": 3.0,
+        "w_reliability": 8.0
+      },
+      "metrics": {
+        "method": "ILP",
+        "n_clusters": 15,
+        "n_tasks": 48,
+        "cost": 150,
+        "cost_base": 480,
+        "cost_reduction": 0.6875,
+        "leakage_kg": 2.4999999999999998e-05,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 30.0,
+        "delay": 13.0,
+        "fitness": 75.075
+      }
+    },
+    {
+      "gen": 1,
+      "improvement": 25.737,
+      "genome": {
+        "method": "ilp",
+        "C_max": 6,
+        "advance_limit": 4,
+        "safety_margin": 3,
+        "advance_prefer": 0.17293771189115226,
+        "w_cost": 0.5845664015979765,
+        "w_leak": 3.247706249442606,
+        "w_reliability": 7.513166229860406
+      },
+      "metrics": {
+        "method": "ILP",
+        "n_clusters": 8,
+        "n_tasks": 48,
+        "cost": 80,
+        "cost_base": 480,
+        "cost_reduction": 0.8333333333333334,
+        "leakage_kg": 0.0007922508610115667,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 2.0,
+        "delay": 44.0,
+        "fitness": 49.338310200271664
+      },
+      "delta": {
+        "advance_prefer": 0.6729377118911523,
+        "w_cost": 0.08456640159797646,
+        "w_leak": 0.2477062494426061,
+        "w_reliability": -0.4868337701395937
+      }
+    },
+    {
+      "gen": 3,
+      "improvement": 4.85,
+      "genome": {
+        "method": "ilp",
+        "C_max": 7,
+        "advance_limit": 6,
+        "safety_margin": 2,
+        "advance_prefer": 1.4,
+        "w_cost": 0.6,
+        "w_leak": 3.0,
+        "w_reliability": 16.0
+      },
+      "metrics": {
+        "method": "ILP",
+        "n_clusters": 7,
+        "n_tasks": 48,
+        "cost": 70,
+        "cost_base": 480,
+        "cost_reduction": 0.8541666666666666,
+        "leakage_kg": 0.0008293644629508111,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 5.0,
+        "delay": 43.0,
+        "fitness": 44.488093388852434
+      },
+      "delta": {
+        "advance_prefer": 1.2270622881088475,
+        "w_cost": 0.015433598402023518,
+        "w_leak": -0.2477062494426061,
+        "w_reliability": 8.486833770139594
+      }
+    },
+    {
+      "gen": 4,
+      "improvement": 1.759,
+      "genome": {
+        "method": "ilp",
+        "C_max": 6,
+        "advance_limit": 6,
+        "safety_margin": 2,
+        "advance_prefer": 1.3324774499814929,
+        "w_cost": 0.5144131452779624,
+        "w_leak": 1.9577380645441556,
+        "w_reliability": 16.84879735098541
+      },
+      "metrics": {
+        "method": "ILP",
+        "n_clusters": 8,
+        "n_tasks": 48,
+        "cost": 80,
+        "cost_base": 480,
+        "cost_reduction": 0.8333333333333334,
+        "leakage_kg": 0.0008048184317315623,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 2.0,
+        "delay": 46.0,
+        "fitness": 42.72867530108461
+      },
+      "delta": {
+        "advance_prefer": -0.06752255001850704,
+        "w_cost": -0.08558685472203753,
+        "w_leak": -1.0422619354558444,
+        "w_reliability": 0.8487973509854108
+      }
+    },
+    {
+      "gen": 5,
+      "improvement": 2.897,
+      "genome": {
+        "method": "greedy",
+        "C_max": 7,
+        "advance_limit": 6,
+        "safety_margin": 3,
+        "advance_prefer": 0.5897898578497203,
+        "w_cost": 0.5462975278003629,
+        "w_leak": 1.896420348544385,
+        "w_reliability": 13.291640707860106
+      },
+      "metrics": {
+        "method": "Greedy",
+        "n_clusters": 7,
+        "n_tasks": 48,
+        "cost": 70,
+        "cost_base": 480,
+        "cost_reduction": 0.8541666666666666,
+        "leakage_kg": 0.0008390103211889335,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 6.0,
+        "delay": 41.0,
+        "fitness": 39.831943191766854
+      },
+      "delta": {
+        "advance_prefer": -0.7426875921317726,
+        "w_cost": 0.031884382522400445,
+        "w_leak": -0.06131771599977065,
+        "w_reliability": -3.557156643125305
+      }
+    },
+    {
+      "gen": 7,
+      "improvement": 15.045,
+      "genome": {
+        "method": "ilp",
+        "C_max": 8,
+        "advance_limit": 5,
+        "safety_margin": 1,
+        "advance_prefer": 1.4091585121567682,
+        "w_cost": 0.4082316481536427,
+        "w_leak": 0.34761971326039326,
+        "w_reliability": 1.5851240467504297
+      },
+      "metrics": {
+        "method": "ILP",
+        "n_clusters": 6,
+        "n_tasks": 48,
+        "cost": 60,
+        "cost_base": 480,
+        "cost_reduction": 0.875,
+        "leakage_kg": 0.0008440753995986633,
+        "n_violations": 0,
+        "reliability": 1.0,
+        "advance": 1.0,
+        "delay": 46.0,
+        "fitness": 24.7873161375972
+      },
+      "delta": {
+        "advance_prefer": 0.819368654307048,
+        "w_cost": -0.13806587964672018,
+        "w_leak": -1.5488006352839916,
+        "w_reliability": -11.706516661109676
+      }
+    }
+  ]
+}

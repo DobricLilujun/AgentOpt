@@ -109,6 +109,7 @@ class EvolutionMaster:
                  llm_proposer=None, H: int = 30):
         self.tasks = tasks
         self.units = units
+        self.H = H
         self.pop_size = pop_size
         self.generations = generations
         self.rng = np.random.default_rng(seed)
@@ -118,11 +119,12 @@ class EvolutionMaster:
         self.history = []          # per-generation log
         self.best = None
         self.memory = []          # reflection log: {gen, genome, metrics, what_helped}
+        self.llm_calls = 0        # number of LLM proposer calls made
 
     def _eval(self, s: Strategy) -> Strategy:
         g, e = s.to_solvers()
-        res = g.group(self.tasks, C_max=s.C_max, H=30)
-        m = e.evaluate(self.tasks, res)
+        res = g.group(self.tasks, C_max=s.C_max, H=self.H)
+        m = e.evaluate(self.tasks, res, H=self.H)
         s.metrics = m
         s.fitness = m["fitness"]
         return s
@@ -180,17 +182,22 @@ class EvolutionMaster:
 
             # --- produce next generation ---
             next_pop = [copy.deepcopy(best)]  # elitism
-            # GA mutation
+            # In LLM mode, ask the LLM brain to propose a BATCH of candidates
+            # this generation (one LLM call -> several strategies).
+            if self.mode == "llm" and self.llm_proposer is not None:
+                best_report = {"genome": best.genome(), "metrics": best.metrics}
+                llm_children = self.llm_proposer.propose(gen, best_report, self.history)
+                for child in llm_children:
+                    next_pop.append(self._eval(child))
+                self.llm_calls = getattr(self, "llm_calls", 0) + 1
+            # GA mutation/crossover to fill the rest of the population
             while len(next_pop) < self.pop_size:
                 p1 = pop[self.rng.integers(0, len(pop))]
                 p2 = pop[self.rng.integers(0, len(pop))]
-                if self.mode == "llm" and self.llm_proposer is not None and self.rng.random() < 0.5:
-                    child = self.llm_proposer(self.history[-1]) or p1.mutated(self.rng)
+                if self.rng.random() < 0.4:
+                    child = Strategy.crossover(p1, p2)
                 else:
-                    if self.rng.random() < 0.4:
-                        child = Strategy.crossover(p1, p2)
-                    else:
-                        child = p1.mutated(self.rng)
+                    child = p1.mutated(self.rng)
                 next_pop.append(self._eval(child))
             # keep best pop_size
             next_pop.sort(key=lambda s: s.fitness)
@@ -199,7 +206,8 @@ class EvolutionMaster:
         return {"best_strategy": self.best,
                 "history": self.history,
                 "memory": self.memory,
-                "generations": self.generations}
+                "generations": self.generations,
+                "llm_calls": getattr(self, "llm_calls", 0)}
 
     def report(self) -> str:
         b = self.best

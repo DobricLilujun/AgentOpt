@@ -39,8 +39,6 @@ def load_degradation_rates(max_units: int = 0,
                            tail_days: int = 120,
                            horizon_days: int = 30) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Fit per-unit degradation rates from the real pressure trends.
-
-    Returns (units, tasks):
       units: per-unit degradation rate alpha and a representative start pressure
       tasks: a GR maintenance schedule built from those rates (paper horizon)
     """
