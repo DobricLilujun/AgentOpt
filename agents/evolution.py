@@ -12,12 +12,12 @@ What a Strategy evolves (the search space)
   method          : "ilp" (exact) | "greedy" (fast)          -> which solver
   C_max           : max tasks per cluster/day                -> capacity knob
   advance_limit   : A, max days a task may be advanced
-  safety_margin   : days kept above the 3.0 bar alarm
+  safety_margin   : days kept above the critical level P_CRIT
   advance_prefer  : bias toward advancing vs delaying tasks
   w_cost / w_leak / w_reliability : the EVALUATION weights -> the TRADE-OFF
                                     (this is what lets the system discover
                                     cost-vs-environment-vs-reliability policies
-                                    that the paper's single-objective ILP cannot)
+                                    that a single-objective ILP cannot)
 
 Self-evolution mechanics
 ------------------------
@@ -67,7 +67,7 @@ class Strategy:
     def to_solvers(self):
         """Instantiate the GroupingAgent and EvaluationAgent for this strategy."""
         g = GroupingAgent(method=self.method, advance_prefer=self.advance_prefer,
-                          window_len=10, advance_limit=self.advance_limit, cost_per_gr=10)
+                          window_len=10, advance_limit=self.advance_limit, cost_per_service=10)
         e = EvaluationAgent(w_cost=self.w_cost, w_leak=self.w_leak,
                             w_reliability=self.w_reliability,
                             advance_limit=self.advance_limit, safety_margin=self.safety_margin)
@@ -131,7 +131,7 @@ class EvolutionMaster:
 
     def _initial_pop(self) -> list[Strategy]:
         # a diverse starting population spanning the search space, seeded with the
-        # known-good paper ILP baseline and the greedy baseline so the GA has a
+        # known-good conventional ILP baseline and the greedy baseline so the GA has a
         # strong elite to breed from.
         seeds = [
             Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=2,

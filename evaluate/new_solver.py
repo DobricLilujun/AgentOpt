@@ -96,7 +96,7 @@ if __name__ == "__main__":
     H = int(tasks["t_n"].max()) + 3
 
     # --- current solver: PuLP / CBC ---
-    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_gr=10, time_limit=30)
+    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10, time_limit=30)
     r_cbc = g.group(tasks, C_max=5, H=H)
     m_cbc = EvaluationAgent().evaluate(tasks, r_cbc, H=H)
     print(f"\n[CBC / PuLP ILP]  clusters={m_cbc['n_clusters']:3}  cost={m_cbc['cost']:5}  "

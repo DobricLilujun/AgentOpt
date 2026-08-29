@@ -1,18 +1,18 @@
 """
 GroupingAgent -- Stage 2 of the maintenance pipeline.
 
-Turns a set of GR tasks into a grouped schedule (which tasks run on which day)
-by minimising the number of deployment clusters, subject to operational
-constraints. Two strategies, selectable per generation:
+Turns a set of pressure-service tasks into a grouped schedule (which tasks run
+on which day) by minimising the number of deployment clusters, subject to
+operational constraints. Two strategies, selectable per generation:
 
-  - "ilp":    exact Integer Linear Programming (faithful to the paper's model,
+  - "ilp":    exact Integer Linear Programming (the core model,
               constraints 1-10). Objective: minimise # activated clusters.
   - "greedy": fast sliding-window heuristic.
 
 A strategy can also add a small "advance-preference" penalty that biases tasks
 toward being brought FORWARD (earlier) rather than delayed -- this addresses
-the paper's open point that the model has no advance/delay preference, and is
-one of the knobs the EvolutionMaster evolves.
+the open point that the model has no advance/delay preference, and is one of
+the knobs the EvolutionMaster evolves.
 
 Implementation notes
 ---------------------
@@ -26,10 +26,10 @@ import numpy as np
 import pandas as pd
 import pulp
 
-P_MAX = 3.5
-P_GR_TRIGGER = 3.2
-P_CRITICAL = 3.0
-SAFETY_MARGIN = 2  # conservative days before the 3.0 bar alarm
+P_NOM = 3.5
+P_SERV = 3.2
+P_CRIT = 3.0
+SAFETY_MARGIN = 2  # conservative days before reaching the critical level P_CRIT
 
 
 class GroupingAgent:
@@ -37,26 +37,26 @@ class GroupingAgent:
                  advance_prefer: float = 0.0,
                  window_len: int = 10,
                  advance_limit: int = 3,
-                 cost_per_gr: int = 10,
+                 cost_per_service: int = 10,
                  time_limit: int = 20):
         self.method = method
         self.advance_prefer = advance_prefer  # extra cost per day a task is advanced
         self.window_len = window_len
         self.advance_limit = advance_limit
-        self.cost_per_gr = cost_per_gr
+        self.cost_per_service = cost_per_service
         self.time_limit = time_limit
 
-    # ---- bounds (paper constraints 5-8) ---------------------------------
+    # ---- bounds (constraints 5-8) ---------------------------------
     def _bounds(self, tasks: pd.DataFrame, H: int) -> pd.DataFrame:
         df = tasks.copy().reset_index().rename(columns={"index": "orig_idx"})
         A = self.advance_limit
         df["a_n"] = df["t_n"].clip(lower=0).apply(lambda x: max(0, x - A))
-        days_to_critical = (P_GR_TRIGGER - P_CRITICAL) / df["alpha"].clip(lower=1e-6)
+        days_to_critical = (P_SERV - P_CRIT) / df["alpha"].clip(lower=1e-6)
         df["b_n"] = np.minimum(H, df["t_n"] + days_to_critical - SAFETY_MARGIN).round().astype(int)
         df.loc[df["b_n"] < df["a_n"], "b_n"] = df.loc[df["b_n"] < df["a_n"], "a_n"]
         return df
 
-    # ---- ILP solver (paper model + optional advance-preference penalty) --
+    # ---- ILP solver (core model + optional advance-preference penalty) --
     def _solve_ilp(self, tasks: pd.DataFrame, C_max: int, H: int) -> dict:
         df = self._bounds(tasks, H)
         prob = pulp.LpProblem("grouping", pulp.LpMinimize)

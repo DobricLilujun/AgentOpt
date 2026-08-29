@@ -1,22 +1,21 @@
 """
-Stage 2 - Task grouping optimization (MIMAR, Wu et al. 2025).
+Stage 2 - Task grouping optimization.
 
 Two solvers:
-  (A) Exact Integer Linear Programming  -- faithful to the paper's ILP model
-      (constraints 1-10, Table 1). Objective (1): minimise the number of
-      activated maintenance clusters (== deployments). This is the paper's
-      core model.
-  (B) Greedy sliding-window heuristic  -- the "sliding window framework"
-      described in Section 3.1, used as a fast baseline and a component
+  (A) Exact Integer Linear Programming  -- the exact grouping model
+      (constraints 1-10). Objective (1): minimise the number of activated
+      maintenance clusters (== deployments). This is the core model.
+  (B) Greedy sliding-window heuristic  -- a fast baseline and a component
       inside the multi-agent system.
 
-Window / feasibility (paper constraints 5-8):
+Window / feasibility (constraints 5-8):
     a_n = max(0, t_n - A)                       (earliest a task may move to)
-    b_n = min(H, t_n + (P_GR_TRIGGER - P_CRITICAL)/alpha - SAFETY_MARGIN)
-      where P_GR_TRIGGER = 3.2, P_CRITICAL = 3.0, so the 0.2 bar term is the
-      "days until the 3.0 bar alarm minus a 2-day safety margin".
+    b_n = min(H, t_n + (P_SERV - P_CRIT)/alpha - SAFETY_MARGIN)
+      where P_SERV and P_CRIT are the service-trigger and critical (safety-floor)
+      levels, so the (P_SERV - P_CRIT)/alpha term is the "days until the unit
+      reaches the critical level minus a safety margin".
 
-Capacity (constraint 4): at most C^max_GR = 5 tasks per cluster (day).
+Capacity (constraint 4): at most C_MAX tasks per cluster (day).
 """
 from __future__ import annotations
 
@@ -35,7 +34,7 @@ def window_bounds(df: pd.DataFrame, A: int = D.A, H: int = D.T) -> pd.DataFrame:
     df = df.copy()
     df = df.reset_index().rename(columns={"index": "orig_idx"})
     df["a_n"] = df["t_n"].clip(lower=0).apply(lambda x: max(0, x - A))
-    days_to_critical = (D.P_GR_TRIGGER - D.P_CRITICAL) / df["alpha"]
+    days_to_critical = (D.P_SERV - D.P_CRIT) / df["alpha"]
     df["b_n"] = np.minimum(H, df["t_n"] + days_to_critical - D.SAFETY_MARGIN).round().astype(int)
     # never allow b < a
     df.loc[df["b_n"] < df["a_n"], "b_n"] = df.loc[df["b_n"] < df["a_n"], "a_n"]
@@ -43,14 +42,14 @@ def window_bounds(df: pd.DataFrame, A: int = D.A, H: int = D.T) -> pd.DataFrame:
 
 
 def solve_ilp(df: pd.DataFrame,
-              C_max: int = D.P_MAX_GR,
+              C_max: int = D.C_MAX,
               H: int = D.T) -> dict:
-    """Solve the exact grouping ILP (paper constraints 1-10) with PuLP.
+    """Solve the exact grouping ILP (constraints 1-10) with PuLP.
 
     Returns a dict with the assignment, cluster days, objective and metrics.
     """
     df = window_bounds(df, H=H)
-    prob = pulp.LpProblem("GIS_task_grouping", pulp.LpMinimize)
+    prob = pulp.LpProblem("service_task_grouping", pulp.LpMinimize)
 
     # decision vars: x[(tid, d)] binary, y[d] cluster-active
     x = {}
@@ -86,8 +85,8 @@ def solve_ilp(df: pd.DataFrame,
 
     n_clusters = len(active_days)
     n_tasks = len(df)
-    cost = n_clusters * D.COST_PER_GR
-    cost_base = n_tasks * D.COST_PER_GR
+    cost = n_clusters * D.COST_PER_SERVICE
+    cost_base = n_tasks * D.COST_PER_SERVICE
     return {
         "method": "ILP",
         "status": pulp.LpStatus[prob.status],
@@ -102,13 +101,13 @@ def solve_ilp(df: pd.DataFrame,
 
 
 def solve_greedy(df: pd.DataFrame,
-                 C_max: int = D.P_MAX_GR,
+                 C_max: int = D.C_MAX,
                  H: int = D.T) -> dict:
-    """Greedy sliding-window heuristic (Section 3.1 style).
+    """Greedy sliding-window heuristic.
 
     Sort tasks by their original time; attach each task to an existing
     in-window cluster if capacity allows, else open a new cluster at the
-    earliest feasible day (a slight preference for advancing, per the paper).
+    earliest feasible day (a slight preference for advancing).
     """
     df = window_bounds(df, H=H)
     df = df.sort_values("t_n").reset_index(drop=True)
@@ -134,8 +133,8 @@ def solve_greedy(df: pd.DataFrame,
     active_days = [d for d, t in clusters.items() if t]
     n_clusters = len(active_days)
     n_tasks = len(df)
-    cost = n_clusters * D.COST_PER_GR
-    cost_base = n_tasks * D.COST_PER_GR
+    cost = n_clusters * D.COST_PER_SERVICE
+    cost_base = n_tasks * D.COST_PER_SERVICE
     return {
         "method": "Greedy",
         "assignment": assignment,
@@ -151,7 +150,7 @@ def solve_greedy(df: pd.DataFrame,
 if __name__ == "__main__":
     from degrade import generate_maintenance_plan
     plan = generate_maintenance_plan(seed=0)
-    print(f"Stage1 tasks: {len(plan)}  (paper's seed gave 22; count is seed-dependent)")
+    print(f"Stage1 tasks: {len(plan)}  (count is seed-dependent)")
     ilp = solve_ilp(plan)
     gr = solve_greedy(plan)
     print("ILP   :", ilp["status"], f"clusters={ilp['n_clusters']}",

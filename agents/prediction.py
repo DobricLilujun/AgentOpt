@@ -2,23 +2,24 @@
 PredictionAgent -- Stage 1 of the maintenance pipeline.
 
 Responsibility: for a set of units, estimate each unit's degradation rate alpha
-(bar/day) and, from that, the ORIGINAL time t_n at which a Gas Refilling (GR)
-task first becomes necessary (pressure would fall to the 3.2 bar trigger).
+(bar/day) and, from that, the ORIGINAL time t_n at which a pressure-service
+(repressurisation) task first becomes necessary (pressure would fall to the
+service-trigger level P_SERV).
 
 Two prediction modes:
   - "real":  alpha is taken from a degradation rate fitted to the unit's real
              pressure trend (the grounded, data-driven mode).
-  - "sim":   alpha is drawn from the paper's uniform distributions, reproducing
-             the paper's simulated degradation (used to reproduce the paper).
+  - "sim":   alpha is drawn from the model's uniform distributions, reproducing
+             the simulated degradation (used to reproduce the baseline).
 """
 from __future__ import annotations
 
 import numpy as np
 import pandas as pd
 
-P_MAX = 3.5
-P_GR_TRIGGER = 3.2
-P_CRITICAL = 3.0
+P_NOM = 3.5
+P_SERV = 3.2
+P_CRIT = 3.0
 
 
 class PredictionAgent:
@@ -34,7 +35,7 @@ class PredictionAgent:
 
     def predict(self, units: pd.DataFrame,
                 horizon: int = 30) -> pd.DataFrame:
-        """Produce a GR maintenance schedule (tasks) from the units.
+        """Produce a pressure-service maintenance schedule (tasks) from the units.
 
         `units` must have columns: csemCur, (optionally) alpha, p0.
         Returns a DataFrame of tasks with columns:
@@ -53,14 +54,14 @@ class PredictionAgent:
             day = 0
             while day < horizon:
                 pressure -= alpha
-                if pressure <= P_GR_TRIGGER:
+                if pressure <= P_SERV:
                     tasks.append({
                         "unit": u["csemCur"],
                         "t_n": day,
                         "alpha": alpha,
                         "p0": p0,
                     })
-                    pressure = P_MAX  # GR restores to max within one day
+                    pressure = P_NOM  # a service restores to the nominal pressure within one day
                 day += 1
         df = pd.DataFrame(tasks)
         if len(df) == 0:

@@ -10,7 +10,7 @@ number of vehicles (== clusters/deployments).
 We validate the SAME multi-agent architecture on the canonical, widely-used
 public benchmark Solomon VRPTW instance C101 (25 vehicles, 100 customers,
 vehicle capacity 200, with time windows). This shows the architecture is a
-general optimization framework, not a one-off for GIS data.
+general optimization framework, not a one-off for this domain's data.
 
 Mapping (maintenance -> VRPTW):
     task / customer        -> a customer i with demand d_i and time window
@@ -22,7 +22,7 @@ Mapping (maintenance -> VRPTW):
 
 Three methods, as in the maintenance study:
     1. No-grouping : one vehicle per customer
-    2. Paper ILP   : exact min-vehicle ILP (fixed capacity, hard time window)
+    2. Conventional ILP : exact min-vehicle ILP (fixed capacity, hard time window)
     3. Multi-agent : the EvolutionMaster, evolved to the VRPTW objective
                      (it can evolve capacity AND a soft/hard time-window
                      interpretation, which the fixed ILP cannot).
@@ -85,7 +85,7 @@ def euclid(a: dict, b: dict) -> float:
 
 
 # ---------------------------------------------------------------------------
-# Method 2: exact min-vehicle ILP (paper-style)
+# Method 2: exact min-vehicle ILP (conventional)
 # ---------------------------------------------------------------------------
 def solve_ilp(inst: dict, capacity: int, H: int, advance_prefer: float = 0.0) -> dict:
     import pulp
@@ -280,7 +280,7 @@ def main():
     print(f"{'method':<20}{'# vehicles':>12}{'capacity':>10}{'violations':>12}")
     print("-" * 56)
     print(f"{'No-grouping':<20}{ng['n_vehicles']:>12}{'-':>10}{ng['violations']:>12}")
-    print(f"{'Paper ILP (exact)':<20}{ilp['n_vehicles']:>12}{inst['capacity']:>10}{ilp['violations']:>12}")
+    print(f"{'Conventional ILP (exact)':<20}{ilp['n_vehicles']:>12}{inst['capacity']:>10}{ilp['violations']:>12}")
     print(f"{'Multi-agent (GA)':<20}{ma['best_metrics']['n_vehicles']:>12}"
           f"{ma['best_metrics']['capacity']:>10}{ma['best_metrics']['violations']:>12}")
     print(f"\nMulti-agent evolved: {ma['best_strategy']}")

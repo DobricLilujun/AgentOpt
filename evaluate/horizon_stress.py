@@ -2,13 +2,13 @@
 Fair longer-horizon stress test (real data).
 
 The H=30 study used a FULL 12-generation multi-agent GA. To compare fairly at
-a larger horizon, we give BOTH the paper ILP and the multi-agent the SAME,
-equal effort here, so the comparison is apples-to-apples (not "full GA vs a
-quick ILP"). This resolves the apparent H=30 vs H=90 difference and reports
-what happens as the problem scales.
+a larger horizon, we give BOTH the conventional ILP and the multi-agent the
+SAME, equal effort here, so the comparison is apples-to-apples (not "full GA
+vs a quick ILP"). This resolves the apparent H=30 vs H=90 difference and
+reports what happens as the problem scales.
 
   - No-grouping
-  - Paper ILP (fixed C_max=5)
+  - Conventional ILP (fixed C_max=5)
   - Multi-agent GA (same generation budget as the ILP, so effort is equal)
 """
 from __future__ import annotations
@@ -32,8 +32,8 @@ def baseline_no_grouping(tasks: pd.DataFrame, H: int) -> dict:
     return EvaluationAgent().evaluate(tasks, res, H=H)
 
 
-def paper_ilp(tasks: pd.DataFrame, H: int) -> dict:
-    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_gr=10, time_limit=8)
+def conventional_ilp(tasks: pd.DataFrame, H: int) -> dict:
+    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10, time_limit=8)
     return EvaluationAgent().evaluate(tasks, g.group(tasks, C_max=5, H=H), H=H)
 
 
@@ -83,13 +83,13 @@ def main():
         tasks = pd.DataFrame(tasks); tasks["tid"] = np.arange(len(tasks))
         print(f"  tasks={len(tasks)}")
         b1 = baseline_no_grouping(tasks, H)
-        b2 = paper_ilp(tasks, H)
+        b2 = conventional_ilp(tasks, H)
         # FAIR: same 12-gen GA as the H=30 study (equal effort to the ILP)
         b3 = multi_agent(tasks, H, generations=12)
         results[H] = {"n_tasks": len(tasks), "no_grouping": b1,
-                      "paper_ilp": b2, "multi_agent": b3}
+                      "conventional_ilp": b2, "multi_agent": b3}
         print(f"  No-grouping : clusters={b1['n_clusters']} cost_red={b1['cost_reduction']:.1%} viol={b1['n_violations']}")
-        print(f"  Paper ILP   : clusters={b2['n_clusters']} cost_red={b2['cost_reduction']:.1%} viol={b2['n_violations']}")
+        print(f"  Conventional ILP: clusters={b2['n_clusters']} cost_red={b2['cost_reduction']:.1%} viol={b2['n_violations']}")
         print(f"  Multi-agent : clusters={b3['n_clusters']} cost_red={b3['cost_reduction']:.1%} viol={b3['n_violations']}")
 
     with open(f"{OUT}/horizon_stress.json", "w") as f:

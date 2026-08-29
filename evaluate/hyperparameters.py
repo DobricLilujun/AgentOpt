@@ -37,7 +37,7 @@ def _single_group(C_max: int, advance_limit: int = 3, safety_margin: int = 2,
     tasks = pd.read_csv(REAL)
     H = _H()
     g = GroupingAgent(method="ilp", advance_limit=advance_limit, advance_prefer=advance_prefer,
-                      cost_per_gr=10, time_limit=15)
+                      cost_per_service=10, time_limit=15)
     r = g.group(tasks, C_max=C_max, H=H)
     return EvaluationAgent(advance_limit=advance_limit, safety_margin=safety_margin).evaluate(
         tasks, r, H=H)

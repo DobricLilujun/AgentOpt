@@ -10,8 +10,8 @@ population.
 This is a genuine, honest LLM-driven evolution: the LLM reads the feedback and
 reasons about which parameters to change; the evaluation is still done by the
 EvaluationAgent (the LLM does not get to declare its own score). It is an
-extension of the paper's "behavior-specific penalties / preferences" future
-work, realised with an LLM.
+extension of the "behavior-specific penalties / preferences" future work,
+realised with an LLM.
 
 Efficiency: one LLM call proposes a small batch (3) of strategies per
 generation, so a 10-generation run makes ~10 LLM calls -- tractable.
@@ -77,7 +77,7 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
     recent_json = json.dumps(recent)
     lines = [
         "You are the brain of a self-evolving maintenance-scheduling optimizer "
-        "for gas-insulated-substation (GIS) gas-refilling (GR) tasks.",
+        "for pressure-service (repressurisation) tasks in a hydraulic station group.",
         f"Generation {gen}. So far the best strategy (genome) and its measured metrics:",
         f"  genome = {genome_json}",
         f"  metrics = {metrics_json}",
@@ -88,11 +88,11 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
         '  method: "ilp" (exact, fewer clusters) or "greedy" (fast, 0 leakage)',
         "  C_max: integer 3..9 (max tasks per cluster/day)",
         "  advance_limit: integer 1..6 (max days a task may be advanced)",
-        "  safety_margin: integer 1..6 (days kept above the 3.0 bar alarm)",
+        "  safety_margin: integer 1..6 (days kept above the critical level P_CRIT)",
         "  advance_prefer: float -2..2 (negative=prefer delay/less leakage, positive=prefer advance)",
         "  w_cost, w_leak, w_reliability: the objective weights (reliability weight 1..20)",
         "Reason about the trade-off: fewer clusters cut deployment cost but delaying a "
-        "task increases SF6 leakage; never allow a reliability violation. Make the 3 "
+        "task increases fluid leakage; never allow a reliability violation. Make the 3 "
         "candidates meaningfully DIFFERENT from each other. "
         "Return ONLY a JSON array of 3 objects, no prose, no markdown.",
     ]

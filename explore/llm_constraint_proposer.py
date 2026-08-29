@@ -45,10 +45,11 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
     recent = [(h["gen"], round(h.get("best_fitness", 0), 2)) for h in history[-4:]]
     return (
         f"You are exploring a constraint-optimization problem for "
-        f"predictive maintenance scheduling in a power substation.\n"
+        f"predictive maintenance scheduling of pressure-service (repressurisation) "
+        f"tasks in a hydraulic station group.\n"
         f"GOAL (fixed): minimise total deployment cost, with 0 reliability "
         f"violations (no task scheduled before it is safe).\n"
-        f"The problem is a task-grouping ILP: each GR task has an original "
+        f"The problem is a task-grouping ILP: each service task has an original "
         f"time t_n; x_i is the day it is scheduled; a cluster = a day with "
         f">=1 task; minimise number of clusters; per-day capacity = 5.\n\n"
         f"Current best constraint set: {best_set}\n"

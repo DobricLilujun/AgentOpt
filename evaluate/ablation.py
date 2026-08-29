@@ -2,10 +2,10 @@
 Ablation studies for the self-evolving multi-agent system.
 
 Each ablation changes/disables one component and measures the effect on the
-final outcome. All are run on the REAL data (48 GR tasks, H=30).
+final outcome. All are run on the REAL data (48 service tasks, H=30).
 
-  A1. Evolution ON vs OFF (evolve vs fixed paper strategy)
-  A2. Prediction source: real-data fitted rates vs simulated (paper-style)
+  A1. Evolution ON vs OFF (evolve vs fixed conventional strategy)
+  A2. Prediction source: real-data fitted rates vs simulated
   A3. Evaluation objective: multi-objective vs single-objective (cost only)
   A4. Grouping solver: ILP vs greedy heuristic
   A5. Evolution engine: GA vs LLM-driven
@@ -59,22 +59,22 @@ def _evolve(pop_size: int = 6, generations: int = 12) -> dict:
 
 
 def ablation_A_evolution() -> dict:
-    """A1: evolution ON (full GA) vs OFF (fixed paper ILP strategy)."""
+    """A1: evolution ON (full GA) vs OFF (fixed conventional ILP strategy)."""
     tasks = pd.read_csv(REAL)
     H = _H()
-    # OFF = the paper's fixed single-objective ILP strategy
-    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_gr=10, time_limit=15)
+    # OFF = the conventional fixed single-objective ILP strategy
+    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10, time_limit=15)
     r = g.group(tasks, C_max=5, H=H)
     m_off = EvaluationAgent().evaluate(tasks, r, H=H)
     m_on = _evolve()
-    return {"ON (self-evolution)": m_on, "OFF (fixed paper ILP)": m_off}
+    return {"ON (self-evolution)": m_on, "OFF (fixed conventional ILP)": m_off}
 
 
 def ablation_B_prediction() -> dict:
     """A2: prediction source real-data fitted vs simulated."""
     tasks = pd.read_csv(REAL)
     H = _H()
-    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_gr=10, time_limit=15)
+    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10, time_limit=15)
     r_real = g.group(tasks, C_max=5, H=H)
     m_real = EvaluationAgent().evaluate(tasks, r_real, H=H)
     rng = np.random.default_rng(0)
@@ -82,7 +82,7 @@ def ablation_B_prediction() -> dict:
     sim["t_n"] = rng.normal(loc=15, scale=8, size=len(sim)).clip(0, H - 1)
     r_sim = g.group(sim, C_max=5, H=H)
     m_sim = EvaluationAgent().evaluate(sim, r_sim, H=H)
-    return {"real-data fitted": m_real, "simulated (paper-style)": m_sim}
+    return {"real-data fitted": m_real, "simulated": m_sim}
 
 
 def ablation_C_evaluation() -> dict:
@@ -111,8 +111,8 @@ def ablation_D_grouping() -> dict:
     """A4: grouping solver ILP vs greedy."""
     tasks = pd.read_csv(REAL)
     H = _H()
-    g_ilp = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_gr=10, time_limit=15)
-    g_greedy = GroupingAgent(method="greedy", advance_prefer=0.0, cost_per_gr=10)
+    g_ilp = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10, time_limit=15)
+    g_greedy = GroupingAgent(method="greedy", advance_prefer=0.0, cost_per_service=10)
     r_ilp = g_ilp.group(tasks, C_max=5, H=H)
     r_greedy = g_greedy.group(tasks, C_max=5, H=H)
     m_ilp = EvaluationAgent().evaluate(tasks, r_ilp, H=H)

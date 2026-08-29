@@ -46,7 +46,7 @@ additional constraints beyond these templates.
 
 ## 4. The goal (fixed)
 
-**Total cost** = deployment cost + $\mathrm{SF_6}$ leakage cost +
+**Total cost** = deployment cost + fluid-leakage cost +
 reliability penalty:
 $$\text{total} = c_{\mathrm{dep}}\cdot N_{\mathrm{cl}} + N_{\mathrm{GR}}
    + \beta_{\mathrm{leak}}\sum_n \max(x_n - t_n,0)
@@ -56,7 +56,7 @@ $V$ the number of reliability violations. The base optimisation
 minimises clusters with a small advance penalty so the optimum is
 **unique and reproducible**.
 
-## 5. Results (real data, 48 GR tasks, $H=30$)
+## 5. Results (real data, 48 service tasks, $H=30$)
 
 ### 5.1 Baseline
 10 clusters, deploy cost 148, total cost 23 658 (with the advance

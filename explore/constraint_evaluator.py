@@ -27,7 +27,7 @@ A_BASE = 3
 D_BASE = 15
 C_MAX = 5
 C_DEP = 10          # deployment cost per cluster
-LEAK_COST = 200.0   # cost per kg of SF6 leakage (broad "total cost")
+LEAK_COST = 200.0   # cost per unit of fluid leakage (broad "total cost")
 REL_COST = 500.0    # cost per reliability violation
 
 

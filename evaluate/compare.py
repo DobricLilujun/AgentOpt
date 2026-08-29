@@ -1,11 +1,11 @@
 """
 Evaluation harness: compare the three approaches on the REAL data.
 
-  1. No-grouping baseline   -- every GR task done at its original time
-  2. Paper ILP             -- the MIMAR single-objective ILP (min clusters)
+  1. No-grouping baseline   -- every service task done at its original time
+  2. Conventional ILP       -- the single-objective ILP (min clusters)
   3. Self-evolving agents  -- the EvolutionMaster's evolved strategy
 
-Reported metrics: #clusters (deployments), cost & reduction, SF6 leakage,
+Reported metrics: #clusters (deployments), cost & reduction, fluid leakage,
 reliability (violations), and the advance/delay profile.
 """
 from __future__ import annotations
@@ -28,8 +28,8 @@ def baseline_no_grouping(tasks: pd.DataFrame, H: int = 30) -> dict:
     return e.evaluate(tasks, res, H=H)
 
 
-def run_paper_ilp(tasks: pd.DataFrame, H: int = 30) -> dict:
-    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_gr=10)
+def run_conventional_ilp(tasks: pd.DataFrame, H: int = 30) -> dict:
+    g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10)
     e = EvaluationAgent()
     res = g.group(tasks, C_max=5, H=H)
     return e.evaluate(tasks, res, H=H)
@@ -49,12 +49,12 @@ def main():
     print(f"Real tasks: {len(tasks)}")
 
     b1 = baseline_no_grouping(tasks)
-    b2 = run_paper_ilp(tasks)
+    b2 = run_conventional_ilp(tasks)
     b3 = run_multi_agent(tasks)
 
     rows = {
         "No-grouping": b1,
-        "Paper ILP": b2,
+        "Conventional ILP": b2,
         "Self-evolving agents": b3["metrics"],
     }
     print("\n=== COMPARISON (real data) ===")
