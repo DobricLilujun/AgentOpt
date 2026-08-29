@@ -14,10 +14,9 @@ What a Strategy evolves (the search space)
   advance_limit   : A, max days a task may be advanced
   safety_margin   : days kept above the critical level P_CRIT
   advance_prefer  : bias toward advancing vs delaying tasks
-  w_cost / w_leak / w_reliability : the EVALUATION weights -> the TRADE-OFF
-                                    (this is what lets the system discover
-                                    cost-vs-environment-vs-reliability policies
-                                    that a single-objective ILP cannot)
+  w_reliability : the reliability (safety) penalty severity -> the SAFETY KNOB
+                  (a higher value makes a reliability violation cost more, so the
+                  optimiser pushes harder to keep every unit above P_CRIT).
 
 Self-evolution mechanics
 ------------------------
@@ -51,8 +50,6 @@ class Strategy:
     advance_limit: int = 3
     safety_margin: int = 2
     advance_prefer: float = 0.0
-    w_cost: float = 1.0
-    w_leak: float = 1.0
     w_reliability: float = 5.0
     # bookkeeping (not part of the "genome" the GA mutates on purpose)
     metrics: dict = field(default_factory=dict)
@@ -62,14 +59,13 @@ class Strategy:
         return {"method": self.method, "C_max": self.C_max,
                 "advance_limit": self.advance_limit, "safety_margin": self.safety_margin,
                 "advance_prefer": self.advance_prefer,
-                "w_cost": self.w_cost, "w_leak": self.w_leak, "w_reliability": self.w_reliability}
+                "w_reliability": self.w_reliability}
 
     def to_solvers(self):
         """Instantiate the GroupingAgent and EvaluationAgent for this strategy."""
         g = GroupingAgent(method=self.method, advance_prefer=self.advance_prefer,
                           window_len=10, advance_limit=self.advance_limit, cost_per_service=10)
-        e = EvaluationAgent(w_cost=self.w_cost, w_leak=self.w_leak,
-                            w_reliability=self.w_reliability,
+        e = EvaluationAgent(w_reliability=self.w_reliability,
                             advance_limit=self.advance_limit, safety_margin=self.safety_margin)
         return g, e
 
@@ -82,9 +78,7 @@ class Strategy:
         s.advance_limit = int(np.clip(s.advance_limit + rng.choice([-1, 1]) * rng.integers(0, 2), 1, 6))
         s.safety_margin = int(np.clip(s.safety_margin + rng.choice([-1, 1]) * rng.integers(0, 2), 1, 5))
         s.advance_prefer = float(np.clip(s.advance_prefer + rng.normal(0, 0.5), -2.0, 2.0))
-        # evolve the trade-off weights
-        s.w_cost = float(np.clip(s.w_cost * np.exp(rng.normal(0, 0.2)), 0.1, 5.0))
-        s.w_leak = float(np.clip(s.w_leak * np.exp(rng.normal(0, 0.3)), 0.05, 10.0))
+        # evolve the safety knob
         s.w_reliability = float(np.clip(s.w_reliability * np.exp(rng.normal(0, 0.2)), 1.0, 20.0))
         s.metrics, s.fitness = {}, 0.0
         return s
@@ -97,8 +91,6 @@ class Strategy:
                    advance_limit=pick(a.advance_limit, b.advance_limit),
                    safety_margin=pick(a.safety_margin, b.safety_margin),
                    advance_prefer=pick(a.advance_prefer, b.advance_prefer),
-                   w_cost=pick(a.w_cost, b.w_cost),
-                   w_leak=pick(a.w_leak, b.w_leak),
                    w_reliability=pick(a.w_reliability, b.w_reliability))
 
 
@@ -135,15 +127,15 @@ class EvolutionMaster:
         # strong elite to breed from.
         seeds = [
             Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=2,
-                     advance_prefer=0.0, w_cost=1.0, w_leak=1.0, w_reliability=5.0),
+                     advance_prefer=0.0, w_reliability=5.0),
             Strategy(method="greedy", C_max=5, advance_limit=3, safety_margin=2,
-                     advance_prefer=0.0, w_cost=1.0, w_leak=1.0, w_reliability=5.0),
+                     advance_prefer=0.0, w_reliability=5.0),
             Strategy(method="ilp", C_max=6, advance_limit=4, safety_margin=1,
-                     advance_prefer=0.5, w_cost=2.0, w_leak=0.5, w_reliability=5.0),
+                     advance_prefer=0.5, w_reliability=5.0),
             Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=3,
-                     advance_prefer=-0.5, w_cost=0.5, w_leak=3.0, w_reliability=8.0),
+                     advance_prefer=-0.5, w_reliability=8.0),
             Strategy(method="ilp", C_max=8, advance_limit=4, safety_margin=2,
-                     advance_prefer=0.0, w_cost=3.0, w_leak=1.0, w_reliability=5.0),
+                     advance_prefer=0.0, w_reliability=5.0),
         ]
         pop = [self._eval(s) for s in seeds]
         while len(pop) < self.pop_size:

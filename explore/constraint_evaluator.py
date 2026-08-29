@@ -14,6 +14,11 @@ A candidate CONSTRAINT is added ON TOP of this base, and the evaluator
 reports feasibility, clusters, cost and an "interestingness" score relative
 to the baseline.
 
+There is no fluid-leakage axis: in this hydraulic station group a pressure
+problem is only a slow pressure drop, not a leak of working fluid, and a
+repair returns the unit to its nominal pressure and continues. The cost is
+therefore deployment (transport + personnel) plus a reliability term.
+
 This is a NEW module; it does not import or modify the existing agents/.
 It reuses OR-Tools CP-SAT (the new solver already installed).
 """
@@ -27,13 +32,7 @@ A_BASE = 3
 D_BASE = 15
 C_MAX = 5
 C_DEP = 10          # deployment cost per cluster
-LEAK_COST = 200.0   # cost per unit of fluid leakage (broad "total cost")
 REL_COST = 500.0    # cost per reliability violation
-
-
-def _leakage(x_days, t_n, beta=0.0001):
-    """linear leakage: beta * advance beyond t_n (advancing early leaks more)."""
-    return float(sum(max(x_days[i] - t_n[i], 0) for i in range(len(t_n)))) * beta
 
 
 def _base_model(tasks: pd.DataFrame, H: int):
@@ -91,19 +90,18 @@ def evaluate_constraint(tasks: pd.DataFrame, constraints: list,
             x_days[i] = sol.Value(x[i])
         occ = [d for d in range(H + 1) if clusters[d]]
         deploy = len(occ) * C_DEP + n
-        leak = _leakage(x_days, t_n)
         reliability = sum(max(t_n[i] - x_days[i], 0) for i in range(n))  # days past
-        # composite total cost (the GOAL): deployment + leakage + reliability
-        total = deploy + LEAK_COST * leak + REL_COST * reliability
+        # composite total cost (the GOAL): deployment + reliability
+        total = deploy + REL_COST * reliability
         return {"status": "optimal", "feasible": True,
                 "n_clusters": len(occ), "cost": total,
-                "deploy_cost": deploy, "leak_kg": leak,
+                "deploy_cost": deploy,
                 "n_violations": 0,
                 "tasks": n,
                 "cost_reduction": 1 - deploy / (n * (C_DEP + 1))}
     return {"status": "infeasible", "feasible": False,
             "n_clusters": n, "cost": 1e8,
-            "deploy_cost": n * C_DEP + n, "leak_kg": 0.0, "n_violations": 0,
+            "deploy_cost": n * C_DEP + n, "n_violations": 0,
             "tasks": n,
             "cost_reduction": 1 - (n * C_DEP + n) / (n * (C_DEP + 1))}
 

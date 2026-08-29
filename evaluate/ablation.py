@@ -6,7 +6,7 @@ final outcome. All are run on the REAL data (48 service tasks, H=30).
 
   A1. Evolution ON vs OFF (evolve vs fixed conventional strategy)
   A2. Prediction source: real-data fitted rates vs simulated
-  A3. Evaluation objective: multi-objective vs single-objective (cost only)
+  A3. Evaluation objective: multi-objective vs single-objective (safety only)
   A4. Grouping solver: ILP vs greedy heuristic
   A5. Evolution engine: GA vs LLM-driven
 """
@@ -24,28 +24,28 @@ def _H() -> int:
     return int(pd.read_csv(REAL)["t_n"].max()) + 3
 
 
-def _pop_with_weights(em, w_leak: float, w_reliability: float) -> list:
-    """Build an initial population for em, but force the leakage/reliability
-    weights (and freeze them during evolution so the objective is fixed)."""
+def _pop_with_weights(em, w_reliability: float) -> list:
+    """Build an initial population for em, but force the reliability weight
+    (and freeze it during evolution so the objective is fixed)."""
     from agents.evolution import Strategy
     seeds = [
         Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=2,
-                 advance_prefer=0.0, w_cost=1.0, w_leak=w_leak, w_reliability=w_reliability),
+                 advance_prefer=0.0, w_reliability=w_reliability),
         Strategy(method="greedy", C_max=5, advance_limit=3, safety_margin=2,
-                 advance_prefer=0.0, w_cost=1.0, w_leak=w_leak, w_reliability=w_reliability),
+                 advance_prefer=0.0, w_reliability=w_reliability),
         Strategy(method="ilp", C_max=6, advance_limit=4, safety_margin=1,
-                 advance_prefer=0.5, w_cost=2.0, w_leak=w_leak, w_reliability=w_reliability),
+                 advance_prefer=0.5, w_reliability=w_reliability),
         Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=3,
-                 advance_prefer=-0.5, w_cost=0.5, w_leak=w_leak, w_reliability=w_reliability),
+                 advance_prefer=-0.5, w_reliability=w_reliability),
         Strategy(method="ilp", C_max=8, advance_limit=4, safety_margin=2,
-                 advance_prefer=0.0, w_cost=3.0, w_leak=w_leak, w_reliability=w_reliability),
+                 advance_prefer=0.0, w_reliability=w_reliability),
     ]
     pop = [em._eval(s) for s in seeds]
     while len(pop) < em.pop_size:
         base = seeds[em.rng.integers(0, len(seeds))]
         child = base.mutated(em.rng)
-        # freeze the objective weights so this run stays single/multi-objective
-        child.w_leak, child.w_reliability = w_leak, w_reliability
+        # freeze the objective weight so this run stays single/multi-objective
+        child.w_reliability = w_reliability
         pop.append(em._eval(child))
     pop.sort(key=lambda s: s.fitness)
     return pop
@@ -86,25 +86,25 @@ def ablation_B_prediction() -> dict:
 
 
 def ablation_C_evaluation() -> dict:
-    """A3: multi-objective vs single-objective EVALUATION (evolve to a policy)."""
+    """A3: relaxed vs strict safety (evolve to a safety policy)."""
     tasks = pd.read_csv(REAL)
     H = _H()
     from agents.evolution import Strategy
-    # single-objective: evolve with cost only (leakage/reliability ignored)
+    # relaxed: evolve with a low reliability (safety) penalty weight
     em1 = EvolutionMaster(tasks=tasks, pop_size=6, generations=10, seed=0, mode="ga", H=H)
-    # force the initial population to be cost-only by rewriting seeds' weights
-    def _force_single(em):
-        em._initial_pop = lambda: _pop_with_weights(em, w_leak=0.0, w_reliability=1.0)
-    def _force_multi(em):
-        em._initial_pop = lambda: _pop_with_weights(em, w_leak=1.0, w_reliability=5.0)
-    _force_single(em1)
+    # force the initial population by rewriting seeds' weight
+    def _force_relaxed(em):
+        em._initial_pop = lambda: _pop_with_weights(em, w_reliability=1.0)
+    def _force_strict(em):
+        em._initial_pop = lambda: _pop_with_weights(em, w_reliability=5.0)
+    _force_relaxed(em1)
     m1 = em1.run()["best_strategy"].metrics
-    # multi-objective: default (cost + leakage + reliability)
+    # strict: default (strong reliability penalty)
     em2 = EvolutionMaster(tasks=tasks, pop_size=6, generations=10, seed=0, mode="ga", H=H)
-    _force_multi(em2)
+    _force_strict(em2)
     m2 = em2.run()["best_strategy"].metrics
-    return {"single-objective (cost only)": m1,
-            "multi-objective (cost+leakage+reliability)": m2}
+    return {"relaxed safety": m1,
+            "strict safety (default)": m2}
 
 
 def ablation_D_grouping() -> dict:
@@ -137,7 +137,7 @@ def ablation_E_engine() -> dict:
 def _summary(label: str, m: dict) -> str:
     return (f"  {label:40} clusters={m['n_clusters']:2}  "
             f"cost_red={m['cost_reduction']*100:5.1f}%  "
-            f"leakage={m['leakage_kg']:.5f}kg  violations={m['n_violations']}")
+            f"violations={m['n_violations']}")
 
 
 if __name__ == "__main__":

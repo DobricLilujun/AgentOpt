@@ -176,8 +176,8 @@ class _VRPTWEvolutionMaster:
     """EvolutionMaster adapted to the VRPTW objective.
 
     Strategy genome: C_max (capacity), advance_limit, safety_margin
-    (time-window softening), w_cost/w_leak/w_reliability (trade-off weights).
-    Fitness = w_cost*(#vehicles) + w_reliability*(violations)*BIG + w_leak*(slack).
+    (time-window softening), w_reliability (safety penalty severity).
+    Fitness = #vehicles + w_reliability*(violations)*BIG.
     """
     def __init__(self, tasks, capacity, pop_size=8, generations=10, seed=0):
         self.tasks = tasks
@@ -216,10 +216,8 @@ class _VRPTWEvolutionMaster:
         viol = sum(1 for d, dem in day_load.items() if dem > cap)
         # time-window violation: a customer whose day is outside [ready,due]
         tw_viol = 0  # our packing keeps d in [a,b]=[ready-adv, due+safe]; count if outside [ready,due]
-        # slack (advance/delay) as a proxy for leakage
-        fitness = (s.w_cost * n_vehicles
-                   + s.w_reliability * viol * 100.0
-                   + s.w_leak * 0.0)
+        fitness = (n_vehicles
+                   + s.w_reliability * viol * 100.0)
         m = {"n_vehicles": n_vehicles, "capacity": cap, "violations": viol,
              "fitness": fitness}
         s.metrics = m
@@ -230,9 +228,9 @@ class _VRPTWEvolutionMaster:
         from agents.evolution import Strategy
         seeds = [
             Strategy(method="ilp", C_max=self.capacity, advance_limit=0, safety_margin=0,
-                     advance_prefer=0.0, w_cost=1.0, w_leak=1.0, w_reliability=5.0),
+                     advance_prefer=0.0, w_reliability=5.0),
             Strategy(method="greedy", C_max=self.capacity, advance_limit=2, safety_margin=2,
-                     advance_prefer=0.0, w_cost=1.0, w_leak=1.0, w_reliability=5.0),
+                     advance_prefer=0.0, w_reliability=5.0),
         ]
         pop = [self._eval(s) for s in seeds]
         while len(pop) < self.pop_size:

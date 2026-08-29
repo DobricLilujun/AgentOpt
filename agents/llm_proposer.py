@@ -26,7 +26,7 @@ from agents.evolution import Strategy
 
 DEFAULTS = {
     "method": "ilp", "C_max": 5, "advance_limit": 3, "safety_margin": 2,
-    "advance_prefer": 0.0, "w_cost": 1.0, "w_leak": 1.0, "w_reliability": 5.0,
+    "advance_prefer": 0.0, "w_reliability": 5.0,
 }
 
 
@@ -38,8 +38,6 @@ def _clamp(g: dict) -> dict:
     g["advance_limit"] = int(max(1, min(6, int(g.get("advance_limit", 3)))))
     g["safety_margin"] = int(max(1, min(6, int(g.get("safety_margin", 2)))))
     g["advance_prefer"] = float(max(-2.0, min(2.0, float(g.get("advance_prefer", 0.0)))))
-    g["w_cost"] = float(max(0.1, min(5.0, float(g.get("w_cost", 1.0)))))
-    g["w_leak"] = float(max(0.05, min(10.0, float(g.get("w_leak", 1.0)))))
     g["w_reliability"] = float(max(1.0, min(20.0, float(g.get("w_reliability", 5.0)))))
     return g
 
@@ -70,7 +68,7 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
     best_g = best.get("genome", DEFAULTS)
     best_m = best.get("metrics", {})
     recent = [(h["gen"], round(h.get("best_fitness", 0), 3)) for h in history[-3:]]
-    keys = ["n_clusters", "cost", "cost_reduction", "leakage_kg",
+    keys = ["n_clusters", "cost", "cost_reduction",
            "n_violations", "reliability"]
     metrics_json = json.dumps({k: best_m.get(k) for k in keys})
     genome_json = json.dumps(best_g)
@@ -85,15 +83,16 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
         "",
         "PROPOSE exactly 3 candidate strategies to try next. Each is a JSON object "
         "with these keys:",
-        '  method: "ilp" (exact, fewer clusters) or "greedy" (fast, 0 leakage)',
+        '  method: "ilp" (exact, fewer clusters) or "greedy" (fast)',
         "  C_max: integer 3..9 (max tasks per cluster/day)",
         "  advance_limit: integer 1..6 (max days a task may be advanced)",
         "  safety_margin: integer 1..6 (days kept above the critical level P_CRIT)",
-        "  advance_prefer: float -2..2 (negative=prefer delay/less leakage, positive=prefer advance)",
-        "  w_cost, w_leak, w_reliability: the objective weights (reliability weight 1..20)",
-        "Reason about the trade-off: fewer clusters cut deployment cost but delaying a "
-        "task increases fluid leakage; never allow a reliability violation. Make the 3 "
-        "candidates meaningfully DIFFERENT from each other. "
+        "  advance_prefer: float -2..2 (negative=prefer delay, positive=prefer advance)",
+        "  w_reliability: the reliability (safety) penalty severity (1..20)",
+        "Reason about the trade-off: fewer clusters cut deployment cost but a task "
+        "delayed too far risks a reliability violation (the unit dropping below "
+        "P_CRIT); never allow a reliability violation. Make the 3 candidates "
+        "meaningfully DIFFERENT from each other. "
         "Return ONLY a JSON array of 3 objects, no prose, no markdown.",
     ]
     return "\n".join(lines)

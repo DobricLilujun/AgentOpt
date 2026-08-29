@@ -12,18 +12,17 @@ Agents
 - GroupingAgent    (agents.grouping)    : turn a task set into a grouped schedule
                                           via an ILP solver or a sliding-window
                                           heuristic. Chosen per-generation.
-- EvaluationAgent  (agents.evaluation)  : score a schedule on cost, #clusters,
-                                          fluid leakage, and reliability (does any
-                                          unit drop below the critical level P_CRIT?),
-                                          and a composite fitness.
+-EvaluationAgent  (agents.evaluation)  : score a schedule on cost, #clusters,
+                                          and reliability (does any unit drop
+                                          below the critical level P_CRIT?), and
+                                          a composite fitness.
 - EvolutionMaster  (agents.evolution)   : the self-evolution engine. A genetic
                                           algorithm evolves a STRATEGY (a bundle of
                                           scheduling parameters + which agents to
                                           use), keeping the best and breeding
                                           improvements. This is what makes the
-                                          system "self-evolving": it learns the
-                                          parameters that best trade off cost
-                                          against environmental and safety impact
+                                          system "self-evolving": it learns the parameters
+                                          that best trade off cost against safety
                                           on its own, across generations.
 
 The EvolutionMaster is the brain: it is the only agent that changes other agents'

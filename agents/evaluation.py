@@ -2,18 +2,24 @@
 EvaluationAgent -- scores a grouped schedule on the real objective of the
 problem, and turns that score into a fitness for the EvolutionMaster.
 
-The objective is a TRADE-OFF between:
-  - cost        : deployment (transport + personnel) cost, ~ cost_per_service * #clusters
-  - leakage     : hydraulic fluid leaked before each service; a task scheduled LATER
-                  leaks MORE (pressure sits lower for longer), so grouping that
-                  DELAYS a task increases leakage. This is the environmental axis.
+The objective is a TRADE-OFF between two axes:
+  - cost        : deployment (transport + personnel) cost, ~ cost_per_service * #clusters.
+                  Fewer clusters (deployments) is cheaper.
   - reliability : hard safety -- a task scheduled past its latest feasible day
                   b_n lets the unit drop below the critical level P_CRIT -> fault.
                   Any violation is a large penalty (near-disqualifying).
 
-The composite fitness weights these three axes with learned weights, so the
-EvolutionMaster can evolve the trade-off (e.g. lean toward cost, or toward
-environmental impact) and discover strategies a single-objective ILP cannot reach.
+(There is no fluid-leakage axis: in this hydraulic station group a pressure
+problem is only a slow pressure DROP, not a real leak of working fluid, and a
+repair simply returns the unit to its nominal pressure P_NOM and continues.
+There is therefore no mass of fluid that "leaks" to cost.)
+
+The composite fitness minimises deployment cost, with reliability enforced as a
+HARD constraint (a violation is a large, near-disqualifying penalty whose
+severity the EvolutionMaster can evolve via w_reliability). This lets the
+system discover scheduling strategies that cut cost while guaranteeing the
+safety constraint -- something a single-objective ILP (which fixes the safety
+margin) cannot.
 """
 from __future__ import annotations
 
@@ -23,7 +29,6 @@ import pandas as pd
 P_NOM = 3.5
 P_SERV = 3.2
 P_CRIT = 3.0
-LEAK_RATE_PER_BAR_DAY = 0.0005  # fluid leaked per bar-day of undershoot (model constant)
 
 
 def _feasibility(tasks: pd.DataFrame, assignment: dict, H: int,
@@ -39,14 +44,10 @@ def _feasibility(tasks: pd.DataFrame, assignment: dict, H: int,
 
 class EvaluationAgent:
     def __init__(self,
-                 w_cost: float = 1.0,
-                 w_leak: float = 1.0,
                  w_reliability: float = 5.0,
                  cost_per_service: int = 10,
                  advance_limit: int = 3,
                  safety_margin: int = 2):
-        self.w_cost = w_cost
-        self.w_leak = w_leak
         self.w_reliability = w_reliability
         self.cost_per_service = cost_per_service
         self.advance_limit = advance_limit
@@ -66,27 +67,25 @@ class EvaluationAgent:
         cost = n_clusters * self.cost_per_service
         cost_base = n_tasks * self.cost_per_service
 
-        # leakage: for each task, leak ~ alpha * (days below trigger before service)
-        # a task scheduled at `scheduled_day` leaks alpha*(scheduled_day - t_n) extra
-        # relative to its original trigger; advancing reduces it, delaying increases it.
-        df["leak"] = df["alpha"] * (df["scheduled_day"] - df["t_n"]).clip(lower=0) * LEAK_RATE_PER_BAR_DAY
-        leakage = float(df["leak"].sum())
-
         # reliability: a violation is a task scheduled past its latest feasible day
         df["violation"] = df["scheduled_day"] > df["b_n"] + 1e-6
         n_violations = int(df["violation"].sum())
         reliability = 1.0 - n_violations / max(n_tasks, 1)
         reliability_penalty = float(n_violations)  # hard penalty
 
-        # advance/delay profile (the "advance vs delay" diagnostic)
+        # advance/delay profile (the "advance vs delay" diagnostic, informational)
         df["shift"] = df["scheduled_day"] - df["t_n"]
         advance = float((df["shift"] < 0).sum())
         delay = float((df["shift"] > 0).sum())
 
-        # composite fitness (lower is better); reliability dominates
-        fitness = (self.w_cost * cost
-                   + self.w_leak * leakage * 1000.0
-                   + self.w_reliability * reliability_penalty * 100.0)
+        # fitness (lower is better).
+        # Reliability is a HARD safety requirement, not a tunable trade-off:
+        # a schedule with any violation is penalised heavily (near-disqualifying)
+        # so the optimiser never accepts a cheaper-but-unsafe schedule.
+        # With 0 violations (the normal case) the fitness is just the deployment
+        # cost, so minimising clusters == minimising cost.
+        fitness = (cost
+                   + self.w_reliability * reliability_penalty * 1e5)
         return {
             "method": result.get("method", "?"),
             "n_clusters": n_clusters,
@@ -94,7 +93,6 @@ class EvaluationAgent:
             "cost": cost,
             "cost_base": cost_base,
             "cost_reduction": 1 - cost / cost_base if cost_base else 0.0,
-            "leakage_kg": leakage,
             "n_violations": n_violations,
             "reliability": reliability,
             "advance": advance,

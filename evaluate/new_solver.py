@@ -100,22 +100,22 @@ if __name__ == "__main__":
     r_cbc = g.group(tasks, C_max=5, H=H)
     m_cbc = EvaluationAgent().evaluate(tasks, r_cbc, H=H)
     print(f"\n[CBC / PuLP ILP]  clusters={m_cbc['n_clusters']:3}  cost={m_cbc['cost']:5}  "
-          f"cost_red={m_cbc['cost_reduction']*100:5.1f}%  leakage={m_cbc['leakage_kg']:.5f}kg  "
+          f"cost_red={m_cbc['cost_reduction']*100:5.1f}%  "
           f"viol={m_cbc['n_violations']}")
 
     # --- NEW solver: OR-Tools CP-SAT ---
     r_cs = solve_cpsat(tasks, C_max=5, H=H, time_limit=30)
     m_cs = EvaluationAgent().evaluate(tasks, r_cs, H=H)
     print(f"[CP-SAT/OR-Tools] clusters={m_cs['n_clusters']:3}  cost={m_cs['cost']:5}  "
-          f"cost_red={m_cs['cost_reduction']*100:5.1f}%  leakage={m_cs['leakage_kg']:.5f}kg  "
+          f"cost_red={m_cs['cost_reduction']*100:5.1f}%  "
           f"viol={m_cs['n_violations']}")
 
     # --- summary ---
     print("\n=== SOLVER COMPARISON (same tasks, same C_max=5, same model) ===")
     print(f"  CBC / PuLP  : {m_cbc['n_clusters']} clusters, cost={m_cbc['cost']}, "
-          f"leakage={m_cbc['leakage_kg']:.5f}kg, violations={m_cbc['n_violations']}")
+          f"violations={m_cbc['n_violations']}")
     print(f"  CP-SAT/OR-Tools: {m_cs['n_clusters']} clusters, cost={m_cs['cost']}, "
-          f"leakage={m_cs['leakage_kg']:.5f}kg, violations={m_cs['n_violations']}")
+          f"violations={m_cs['n_violations']}")
     import json
     json.dump({"cbc": m_cbc, "cpsat": m_cs}, open("results/new_solver.json", "w"), indent=2)
     print("\nsaved results/new_solver.json")

@@ -2,14 +2,14 @@
 Hyperparameter comparisons for the multi-agent system.
 
 Sweeps each hyperparameter and measures the effect on the final outcome
-(clusters, cost reduction, leakage, violations) on the REAL data (H=30).
+(clusters, cost reduction, violations) on the REAL data (H=30).
 
   H1. population size    : 4, 6, 8, 10
   H2. generations        : 4, 8, 12, 16
   H3. C_max (capacity)   : 3, 5, 7, 8   (direct sweep of the grouping agent)
   H4. advance_limit A    : 1, 3, 6
   H5. safety_margin      : 1, 2, 4
-  H6. objective weights  : cost / leakage / reliability emphasis
+  H6. objective weights  : reliability (safety) emphasis
 """
 from __future__ import annotations
 import sys, time, json
@@ -64,25 +64,25 @@ def H5_safety_margin() -> dict:
 
 
 def H6_objective_weights() -> dict:
-    """Cost-only vs leakage-emphasis vs reliability-emphasis, evolved."""
+    """Relaxed vs strict reliability (safety) penalty, evolved."""
     tasks = pd.read_csv(REAL)
     H = _H()
     from agents.evolution import Strategy
 
-    def _evolve_w(w_leak: float, w_reliability: float) -> dict:
+    def _evolve_w(w_reliability: float) -> dict:
         em = EvolutionMaster(tasks=tasks, pop_size=6, generations=10, seed=0, mode="ga", H=H)
-        # force the objective weights (freeze during evolution)
+        # force the objective weight (freeze during evolution)
         seeds = [
             Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=2,
-                     advance_prefer=0.0, w_cost=1.0, w_leak=w_leak, w_reliability=w_reliability),
+                     advance_prefer=0.0, w_reliability=w_reliability),
             Strategy(method="ilp", C_max=6, advance_limit=4, safety_margin=1,
-                     advance_prefer=0.5, w_cost=2.0, w_leak=w_leak, w_reliability=w_reliability),
+                     advance_prefer=0.5, w_reliability=w_reliability),
             Strategy(method="ilp", C_max=5, advance_limit=3, safety_margin=3,
-                     advance_prefer=-0.5, w_cost=0.5, w_leak=w_leak, w_reliability=w_reliability),
+                     advance_prefer=-0.5, w_reliability=w_reliability),
             Strategy(method="ilp", C_max=8, advance_limit=4, safety_margin=2,
-                     advance_prefer=0.0, w_cost=3.0, w_leak=w_leak, w_reliability=w_reliability),
+                     advance_prefer=0.0, w_reliability=w_reliability),
             Strategy(method="greedy", C_max=5, advance_limit=3, safety_margin=2,
-                     advance_prefer=0.0, w_cost=1.0, w_leak=w_leak, w_reliability=w_reliability),
+                     advance_prefer=0.0, w_reliability=w_reliability),
         ]
         orig = em._initial_pop
         def _forced():
@@ -90,7 +90,7 @@ def H6_objective_weights() -> dict:
             while len(pop) < em.pop_size:
                 base = seeds[em.rng.integers(0, len(seeds))]
                 c = base.mutated(em.rng)
-                c.w_leak, c.w_reliability = w_leak, w_reliability
+                c.w_reliability = w_reliability
                 pop.append(em._eval(c))
             pop.sort(key=lambda s: s.fitness)
             return pop
@@ -98,17 +98,16 @@ def H6_objective_weights() -> dict:
         return em.run()["best_strategy"].metrics
 
     return {
-        "cost only": _evolve_w(0.0, 1.0),
-        "cost+leakage+reliability (default)": _evolve_w(1.0, 5.0),
-        "leakage emphasis": _evolve_w(3.0, 5.0),
-        "reliability emphasis": _evolve_w(1.0, 20.0),
+        "relaxed safety": _evolve_w(1.0),
+        "strict safety (default)": _evolve_w(5.0),
+        "strict safety (max)": _evolve_w(20.0),
     }
 
 
 def _summary(label: str, m: dict) -> str:
     return (f"  {label:34} clusters={m['n_clusters']:2}  "
             f"cost_red={m['cost_reduction']*100:5.1f}%  "
-            f"leakage={m['leakage_kg']:.5f}kg  violations={m['n_violations']}")
+            f"violations={m['n_violations']}")
 
 
 if __name__ == "__main__":

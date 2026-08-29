@@ -6,12 +6,11 @@
     "cost": 100,
     "cost_base": 480,
     "cost_reduction": 0.7916666666666666,
-    "leakage_kg": 0.0008460931694309069,
     "n_violations": 0,
     "reliability": 1.0,
     "advance": 3.0,
     "delay": 45.0,
-    "fitness": 100.8460931694309
+    "fitness": 100.0
   },
   "cpsat": {
     "method": "CP-SAT",
@@ -20,11 +19,10 @@
     "cost": 100,
     "cost_base": 480,
     "cost_reduction": 0.7916666666666666,
-    "leakage_kg": 0.0002651879341936112,
     "n_violations": 0,
     "reliability": 1.0,
-    "advance": 12.0,
-    "delay": 35.0,
-    "fitness": 100.2651879341936
+    "advance": 9.0,
+    "delay": 38.0,
+    "fitness": 100.0
   }
 }

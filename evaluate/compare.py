@@ -5,8 +5,8 @@ Evaluation harness: compare the three approaches on the REAL data.
   2. Conventional ILP       -- the single-objective ILP (min clusters)
   3. Self-evolving agents  -- the EvolutionMaster's evolved strategy
 
-Reported metrics: #clusters (deployments), cost & reduction, fluid leakage,
-reliability (violations), and the advance/delay profile.
+Reported metrics: #clusters (deployments), cost & reduction, reliability
+(violations), and the advance/delay profile.
 """
 from __future__ import annotations
 
@@ -58,12 +58,12 @@ def main():
         "Self-evolving agents": b3["metrics"],
     }
     print("\n=== COMPARISON (real data) ===")
-    header = f"{'method':<22}{'clusters':>9}{'cost':>6}{'cost_red':>10}{'leak_kg':>10}{'viol':>6}{'reliab':>8}"
+    header = f"{'method':<22}{'clusters':>9}{'cost':>6}{'cost_red':>10}{'viol':>6}{'reliab':>8}"
     print(header)
     print("-" * len(header))
     for name, m in rows.items():
         print(f"{name:<22}{m['n_clusters']:>9}{m['cost']:>6}"
-              f"{m['cost_reduction']:>10.1%}{m['leakage_kg']:>10.4f}"
+              f"{m['cost_reduction']:>10.1%}"
               f"{m['n_violations']:>6}{m['reliability']:>8.2f}")
 
     if "strategy" in b3:
