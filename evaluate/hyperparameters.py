@@ -2,7 +2,8 @@
 Hyperparameter comparisons for the multi-agent system.
 
 Sweeps each hyperparameter and measures the effect on the final outcome
-(clusters, cost reduction, violations) on the REAL data (H=30).
+(clusters, cost reduction, violations) on the REAL data.
+The horizon H is read from the data, not hardcoded.
 
   H1. population size    : 4, 6, 8, 10
   H2. generations        : 4, 8, 12, 16

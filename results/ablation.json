@@ -1,0 +1,142 @@
+{
+  "A1_evolution": {
+    "ON (self-evolution)": {
+      "method": "ILP",
+      "n_clusters": 6,
+      "n_tasks": 48,
+      "cost": 60,
+      "cost_base": 480,
+      "cost_reduction": 0.875,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
+    },
+    "OFF (fixed conventional ILP)": {
+      "method": "ILP",
+      "n_clusters": 10,
+      "n_tasks": 48,
+      "cost": 100,
+      "cost_base": 480,
+      "cost_reduction": 0.7916666666666666,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 3.0,
+      "delay": 45.0,
+      "fitness": 100.0
+    }
+  },
+  "A2_prediction": {
+    "real-data fitted": {
+      "method": "ILP",
+      "n_clusters": 10,
+      "n_tasks": 48,
+      "cost": 100,
+      "cost_base": 480,
+      "cost_reduction": 0.7916666666666666,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 3.0,
+      "delay": 45.0,
+      "fitness": 100.0
+    },
+    "simulated": {
+      "method": "ILP",
+      "n_clusters": 10,
+      "n_tasks": 48,
+      "cost": 100,
+      "cost_base": 480,
+      "cost_reduction": 0.7916666666666666,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 2.0,
+      "delay": 46.0,
+      "fitness": 100.0
+    }
+  },
+  "A3_evaluation": {
+    "relaxed safety": {
+      "method": "ILP",
+      "n_clusters": 6,
+      "n_tasks": 48,
+      "cost": 60,
+      "cost_base": 480,
+      "cost_reduction": 0.875,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
+    },
+    "strict safety (default)": {
+      "method": "ILP",
+      "n_clusters": 6,
+      "n_tasks": 48,
+      "cost": 60,
+      "cost_base": 480,
+      "cost_reduction": 0.875,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
+    }
+  },
+  "A4_grouping": {
+    "ILP (exact)": {
+      "method": "ILP",
+      "n_clusters": 10,
+      "n_tasks": 48,
+      "cost": 100,
+      "cost_base": 480,
+      "cost_reduction": 0.7916666666666666,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 3.0,
+      "delay": 45.0,
+      "fitness": 100.0
+    },
+    "greedy (heuristic)": {
+      "method": "Greedy",
+      "n_clusters": 20,
+      "n_tasks": 48,
+      "cost": 200,
+      "cost_base": 480,
+      "cost_reduction": 0.5833333333333333,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 29.0,
+      "delay": 13.0,
+      "fitness": 200.0
+    }
+  },
+  "A5_engine": {
+    "GA": {
+      "method": "ILP",
+      "n_clusters": 6,
+      "n_tasks": 48,
+      "cost": 60,
+      "cost_base": 480,
+      "cost_reduction": 0.875,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
+    },
+    "LLM-driven": {
+      "method": "ILP",
+      "n_clusters": 6,
+      "n_tasks": 48,
+      "cost": 60,
+      "cost_base": 480,
+      "cost_reduction": 0.875,
+      "n_violations": 0,
+      "reliability": 1.0,
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
+    }
+  }
+}

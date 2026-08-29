@@ -1,44 +1,44 @@
 {
-  "tasks": 48,
+  "tasks": 204,
   "baselines": {
     "No-grouping": {
       "method": "No-grouping",
-      "n_clusters": 21,
-      "n_tasks": 48,
-      "cost": 210,
-      "cost_base": 480,
-      "cost_reduction": 0.5625,
+      "n_clusters": 77,
+      "n_tasks": 204,
+      "cost": 770,
+      "cost_base": 2040,
+      "cost_reduction": 0.6225490196078431,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 0.0,
       "delay": 0.0,
-      "fitness": 210.0
+      "fitness": 770.0
     },
     "Conventional ILP": {
       "method": "ILP",
-      "n_clusters": 10,
-      "n_tasks": 48,
-      "cost": 100,
-      "cost_base": 480,
-      "cost_reduction": 0.7916666666666666,
+      "n_clusters": 41,
+      "n_tasks": 204,
+      "cost": 410,
+      "cost_base": 2040,
+      "cost_reduction": 0.7990196078431373,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 7.0,
-      "delay": 41.0,
-      "fitness": 100.0
+      "advance": 68.0,
+      "delay": 116.0,
+      "fitness": 410.0
     },
     "Self-evolving agents": {
       "method": "ILP",
-      "n_clusters": 6,
-      "n_tasks": 48,
-      "cost": 60,
-      "cost_base": 480,
-      "cost_reduction": 0.875,
+      "n_clusters": 26,
+      "n_tasks": 204,
+      "cost": 260,
+      "cost_base": 2040,
+      "cost_reduction": 0.8725490196078431,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 4.0,
-      "delay": 42.0,
-      "fitness": 60.0
+      "advance": 74.0,
+      "delay": 114.0,
+      "fitness": 260.0
     }
   },
   "evolved_strategy": {
@@ -52,252 +52,252 @@
   "evolution_history": [
     {
       "gen": 0,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        80.0,
-        100.0,
-        150.0,
-        190.0,
-        200.0
+        260.0,
+        410.0,
+        540.0,
+        580.0,
+        750.0,
+        760.0
       ]
     },
     {
       "gen": 1,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        60.0,
-        150.0,
-        190.0,
-        190.0,
-        200.0
+        260.0,
+        480.0,
+        610.0,
+        750.0,
+        750.0,
+        760.0
       ]
     },
     {
       "gen": 2,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        80.0,
-        100.0,
-        190.0,
-        190.0,
-        190.0
+        260.0,
+        300.0,
+        410.0,
+        750.0,
+        750.0,
+        750.0
       ]
     },
     {
       "gen": 3,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        190.0,
-        190.0,
-        190.0,
-        190.0,
-        210.0
+        260.0,
+        750.0,
+        750.0,
+        750.0,
+        750.0,
+        770.0
       ]
     },
     {
       "gen": 4,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        70.0,
-        70.0,
-        130.0,
-        160.0,
-        180.0
+        260.0,
+        520.0,
+        600.0,
+        730.0,
+        730.0,
+        730.0
       ]
     },
     {
       "gen": 5,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        70.0,
-        100.0,
-        130.0,
-        180.0,
-        180.0
+        260.0,
+        390.0,
+        520.0,
+        730.0,
+        730.0,
+        750.0
       ]
     },
     {
       "gen": 6,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        60.0,
-        60.0,
-        60.0,
-        180.0,
-        190.0
+        260.0,
+        260.0,
+        360.0,
+        730.0,
+        730.0,
+        750.0
       ]
     },
     {
       "gen": 7,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        60.0,
-        60.0,
-        70.0,
-        70.0,
-        160.0
+        260.0,
+        590.0,
+        600.0,
+        730.0,
+        750.0,
+        750.0
       ]
     },
     {
       "gen": 8,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        60.0,
-        60.0,
-        80.0,
-        160.0,
-        190.0
+        260.0,
+        270.0,
+        730.0,
+        730.0,
+        750.0,
+        750.0
       ]
     },
     {
       "gen": 9,
-      "best_fitness": 60.0,
+      "best_fitness": 260.0,
       "best_metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       },
       "population_fitness": [
-        60.0,
-        60.0,
-        60.0,
-        70.0,
-        80.0,
-        130.0
+        260.0,
+        270.0,
+        590.0,
+        730.0,
+        750.0,
+        750.0
       ]
     }
   ],
@@ -314,16 +314,16 @@
       },
       "metrics": {
         "method": "ILP",
-        "n_clusters": 6,
-        "n_tasks": 48,
-        "cost": 60,
-        "cost_base": 480,
-        "cost_reduction": 0.875,
+        "n_clusters": 26,
+        "n_tasks": 204,
+        "cost": 260,
+        "cost_base": 2040,
+        "cost_reduction": 0.8725490196078431,
         "n_violations": 0,
         "reliability": 1.0,
-        "advance": 4.0,
-        "delay": 42.0,
-        "fitness": 60.0
+        "advance": 74.0,
+        "delay": 114.0,
+        "fitness": 260.0
       }
     }
   ]

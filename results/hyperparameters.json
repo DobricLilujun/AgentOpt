@@ -1,18 +1,17 @@
 {
   "H1_population": {
     "4": {
-      "method": "Greedy",
-      "n_clusters": 8,
+      "method": "ILP",
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 80,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.8333333333333334,
-      "leakage_kg": 0.000907135381528339,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 6.0,
-      "delay": 42.0,
-      "fitness": 31.762461312252388
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     },
     "6": {
       "method": "ILP",
@@ -21,12 +20,11 @@
       "cost": 60,
       "cost_base": 480,
       "cost_reduction": 0.875,
-      "leakage_kg": 0.0009442131399210188,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 1.0,
-      "delay": 45.0,
-      "fitness": 23.67587287337258
+      "delay": 46.0,
+      "fitness": 60.0
     },
     "8": {
       "method": "ILP",
@@ -35,84 +33,78 @@
       "cost": 60,
       "cost_base": 480,
       "cost_reduction": 0.875,
-      "leakage_kg": 0.0009445207489356591,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 1.0,
       "delay": 46.0,
-      "fitness": 52.90580622983704
+      "fitness": 60.0
     },
     "10": {
-      "method": "Greedy",
+      "method": "ILP",
       "n_clusters": 6,
       "n_tasks": 48,
       "cost": 60,
       "cost_base": 480,
       "cost_reduction": 0.875,
-      "leakage_kg": 0.0009497329434626752,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 5.0,
-      "delay": 43.0,
-      "fitness": 37.47989861116526
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     }
   },
   "H2_generations": {
     "4": {
       "method": "ILP",
-      "n_clusters": 8,
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 80,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.8333333333333334,
-      "leakage_kg": 0.000900778168774117,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 3.0,
-      "delay": 44.0,
-      "fitness": 47.377323327589224
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     },
     "8": {
       "method": "ILP",
-      "n_clusters": 8,
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 80,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.8333333333333334,
-      "leakage_kg": 0.000903783740239939,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 4.0,
-      "delay": 43.0,
-      "fitness": 43.708098604553925
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     },
     "12": {
       "method": "ILP",
-      "n_clusters": 7,
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 70,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.8541666666666666,
-      "leakage_kg": 0.0009208706050605254,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 2.0,
+      "advance": 1.0,
       "delay": 46.0,
-      "fitness": 38.380547928833764
+      "fitness": 60.0
     },
     "16": {
-      "method": "Greedy",
-      "n_clusters": 11,
+      "method": "ILP",
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 110,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.7708333333333334,
-      "leakage_kg": 0.0008487586335647743,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 4.0,
-      "delay": 44.0,
-      "fitness": 34.79153335228354
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     }
   },
   "H3_capacity": {
@@ -123,12 +115,11 @@
       "cost": 160,
       "cost_base": 480,
       "cost_reduction": 0.6666666666666667,
-      "leakage_kg": 0.00070332815220653,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 6.0,
       "delay": 41.0,
-      "fitness": 160.70332815220652
+      "fitness": 160.0
     },
     "5": {
       "method": "ILP",
@@ -137,12 +128,11 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008460931694309069,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 3.0,
       "delay": 45.0,
-      "fitness": 100.8460931694309
+      "fitness": 100.0
     },
     "7": {
       "method": "ILP",
@@ -151,12 +141,11 @@
       "cost": 70,
       "cost_base": 480,
       "cost_reduction": 0.8541666666666666,
-      "leakage_kg": 0.0009287880608897446,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 2.0,
       "delay": 45.0,
-      "fitness": 70.92878806088974
+      "fitness": 70.0
     },
     "8": {
       "method": "ILP",
@@ -165,12 +154,11 @@
       "cost": 60,
       "cost_base": 480,
       "cost_reduction": 0.875,
-      "leakage_kg": 0.0009362146370896489,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 0.0,
       "delay": 47.0,
-      "fitness": 60.93621463708965
+      "fitness": 60.0
     }
   },
   "H4_advance_limit": {
@@ -181,12 +169,11 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008426764276280509,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 1.0,
       "delay": 46.0,
-      "fitness": 100.84267642762805
+      "fitness": 100.0
     },
     "3": {
       "method": "ILP",
@@ -195,12 +182,11 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008460931694309069,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 3.0,
       "delay": 45.0,
-      "fitness": 100.8460931694309
+      "fitness": 100.0
     },
     "6": {
       "method": "ILP",
@@ -209,12 +195,11 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008459300075235473,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 4.0,
       "delay": 44.0,
-      "fitness": 100.84593000752355
+      "fitness": 100.0
     }
   },
   "H5_safety_margin": {
@@ -225,12 +210,11 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008460931694309069,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 3.0,
       "delay": 45.0,
-      "fitness": 100.8460931694309
+      "fitness": 100.0
     },
     "2": {
       "method": "ILP",
@@ -239,12 +223,11 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008460931694309069,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 3.0,
       "delay": 45.0,
-      "fitness": 100.8460931694309
+      "fitness": 100.0
     },
     "4": {
       "method": "ILP",
@@ -253,70 +236,52 @@
       "cost": 100,
       "cost_base": 480,
       "cost_reduction": 0.7916666666666666,
-      "leakage_kg": 0.0008460931694309069,
       "n_violations": 0,
       "reliability": 1.0,
       "advance": 3.0,
       "delay": 45.0,
-      "fitness": 100.8460931694309
+      "fitness": 100.0
     }
   },
   "H6_objective_weights": {
-    "cost only": {
-      "method": "Greedy",
+    "relaxed safety": {
+      "method": "ILP",
       "n_clusters": 6,
       "n_tasks": 48,
       "cost": 60,
       "cost_base": 480,
       "cost_reduction": 0.875,
-      "leakage_kg": 0.0009497329434626752,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 5.0,
-      "delay": 43.0,
-      "fitness": 31.306504012883078
-    },
-    "cost+leakage+reliability (default)": {
-      "method": "ILP",
-      "n_clusters": 7,
-      "n_tasks": 48,
-      "cost": 70,
-      "cost_base": 480,
-      "cost_reduction": 0.8541666666666666,
-      "leakage_kg": 0.0009208706050605254,
-      "n_violations": 0,
-      "reliability": 1.0,
-      "advance": 2.0,
+      "advance": 1.0,
       "delay": 46.0,
-      "fitness": 41.24643278608918
+      "fitness": 60.0
     },
-    "leakage emphasis": {
+    "strict safety (default)": {
       "method": "ILP",
-      "n_clusters": 7,
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 70,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.8541666666666666,
-      "leakage_kg": 0.0009201069377217822,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 0.0,
-      "delay": 48.0,
-      "fitness": 38.8786394143965
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     },
-    "reliability emphasis": {
-      "method": "Greedy",
-      "n_clusters": 7,
+    "strict safety (max)": {
+      "method": "ILP",
+      "n_clusters": 6,
       "n_tasks": 48,
-      "cost": 70,
+      "cost": 60,
       "cost_base": 480,
-      "cost_reduction": 0.8541666666666666,
-      "leakage_kg": 0.0009485300897177956,
+      "cost_reduction": 0.875,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 0.0,
-      "delay": 47.0,
-      "fitness": 37.025089143788534
+      "advance": 1.0,
+      "delay": 46.0,
+      "fitness": 60.0
     }
   }
 }

@@ -93,7 +93,7 @@ def load_degradation_rates(max_units: int = 0,
 
 
 if __name__ == "__main__":
-    units, tasks = load_degradation_rates(max_units=0, horizon_days=30)
+    units, tasks = load_degradation_rates(max_units=0, horizon_days=90)
     print(f"units with fitted degradation: {len(units)}")
     print(f"units per group: {units.groupby('csemGroupName').size().describe()}")
     print(f"\nfit degradation rate alpha (bar/day):")

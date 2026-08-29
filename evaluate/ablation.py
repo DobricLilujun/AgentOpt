@@ -2,7 +2,8 @@
 Ablation studies for the self-evolving multi-agent system.
 
 Each ablation changes/disables one component and measures the effect on the
-final outcome. All are run on the REAL data (48 service tasks, H=30).
+final outcome. All are run on the REAL data (derived from the real fleet;
+the horizon H is read from the data, not hardcoded).
 
   A1. Evolution ON vs OFF (evolve vs fixed conventional strategy)
   A2. Prediction source: real-data fitted rates vs simulated

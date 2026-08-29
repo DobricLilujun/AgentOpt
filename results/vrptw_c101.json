@@ -123,8 +123,6 @@
       "advance_limit": 0,
       "safety_margin": 0,
       "advance_prefer": 0.0,
-      "w_cost": 1.0,
-      "w_leak": 1.0,
       "w_reliability": 5.0
     },
     "best_metrics": {

@@ -53,7 +53,15 @@ class GroupingAgent:
         df["a_n"] = df["t_n"].clip(lower=0).apply(lambda x: max(0, x - A))
         days_to_critical = (P_SERV - P_CRIT) / df["alpha"].clip(lower=1e-6)
         df["b_n"] = np.minimum(H, df["t_n"] + days_to_critical - SAFETY_MARGIN).round().astype(int)
+        # cap the window to window_len days (a task may be delayed at most
+        # window_len days beyond its trigger) so the ILP stays tractable at
+        # large scale and no service is delayed unboundedly.
+        df["b_n"] = np.maximum(df["b_n"], df["a_n"])
+        if self.window_len:
+            df["b_n"] = np.minimum(df["b_n"], df["a_n"] + self.window_len)
         df.loc[df["b_n"] < df["a_n"], "b_n"] = df.loc[df["b_n"] < df["a_n"], "a_n"]
+        # never let a window extend beyond the planning horizon
+        df["b_n"] = np.minimum(df["b_n"], H)
         return df
 
     # ---- ILP solver (core model + optional advance-preference penalty) --

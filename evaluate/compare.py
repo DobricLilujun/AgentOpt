@@ -19,7 +19,7 @@ sys.path.insert(0, "/home/ubadmin/projects/AgentOpt")
 from agents import EvolutionMaster, GroupingAgent, EvaluationAgent
 
 
-def baseline_no_grouping(tasks: pd.DataFrame, H: int = 30) -> dict:
+def baseline_no_grouping(tasks: pd.DataFrame, H: int) -> dict:
     """Deploy every task at its original time (no grouping)."""
     res = {"method": "No-grouping",
            "assignment": {t.tid: t.t_n for t in tasks.itertuples()},
@@ -28,15 +28,15 @@ def baseline_no_grouping(tasks: pd.DataFrame, H: int = 30) -> dict:
     return e.evaluate(tasks, res, H=H)
 
 
-def run_conventional_ilp(tasks: pd.DataFrame, H: int = 30) -> dict:
+def run_conventional_ilp(tasks: pd.DataFrame, H: int) -> dict:
     g = GroupingAgent(method="ilp", advance_prefer=0.0, cost_per_service=10)
     e = EvaluationAgent()
     res = g.group(tasks, C_max=5, H=H)
     return e.evaluate(tasks, res, H=H)
 
 
-def run_multi_agent(tasks: pd.DataFrame, H: int = 30) -> dict:
-    em = EvolutionMaster(tasks=tasks, pop_size=6, generations=10, seed=0, mode="ga")
+def run_multi_agent(tasks: pd.DataFrame, H: int) -> dict:
+    em = EvolutionMaster(tasks=tasks, pop_size=6, generations=10, seed=0, mode="ga", H=H)
     result = em.run()
     return {"strategy": result["best_strategy"].genome(),
             "metrics": result["best_strategy"].metrics,
@@ -46,11 +46,12 @@ def run_multi_agent(tasks: pd.DataFrame, H: int = 30) -> dict:
 
 def main():
     tasks = pd.read_csv("/home/ubadmin/projects/AgentOpt/results/real_tasks.csv")
-    print(f"Real tasks: {len(tasks)}")
+    H = int(tasks["t_n"].max()) + 3  # derive horizon from the data
+    print(f"Real tasks: {len(tasks)}  (horizon H={H})")
 
-    b1 = baseline_no_grouping(tasks)
-    b2 = run_conventional_ilp(tasks)
-    b3 = run_multi_agent(tasks)
+    b1 = baseline_no_grouping(tasks, H=H)
+    b2 = run_conventional_ilp(tasks, H=H)
+    b3 = run_multi_agent(tasks, H=H)
 
     rows = {
         "No-grouping": b1,
