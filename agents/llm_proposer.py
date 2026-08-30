@@ -22,6 +22,8 @@ import json
 import subprocess
 import re
 
+import pandas as pd
+
 from agents.evolution import Strategy
 
 DEFAULTS = {
@@ -64,7 +66,7 @@ def _parse(out: str) -> list[dict]:
     return [s for s in data if isinstance(s, dict)]
 
 
-def _build_prompt(gen: int, best: dict, history: list) -> str:
+def _build_prompt(gen: int, best: dict, history: list, domain: dict) -> str:
     best_g = best.get("genome", DEFAULTS)
     best_m = best.get("metrics", {})
     recent = [(h["gen"], round(h.get("best_fitness", 0), 3)) for h in history[-3:]]
@@ -73,9 +75,20 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
     metrics_json = json.dumps({k: best_m.get(k) for k in keys})
     genome_json = json.dumps(best_g)
     recent_json = json.dumps(recent)
+    domain_json = json.dumps(domain)
     lines = [
         "You are the brain of a self-evolving maintenance-scheduling optimizer "
-        "for pressure-service (repressurisation) tasks in a hydraulic station group.",
+        "for pressure-service tasks in a hydraulic station group.",
+        "DOMAIN FACTS about the current task set (read these, then reason):",
+        f"  {domain_json}",
+        "Two hard constraints shape the schedule: (1) CROSS-TYPE -- a task of "
+        "repair type A (repressurisation) and a task of type B (seal-replacement) "
+        "can NEVER share a cluster, because they need different technician "
+        "specialities, so a single day with both an A and a B task costs two "
+        "clusters; (2) DEFERRED -- a task whose log says 'this week not "
+        "recommended' cannot be scheduled in its trigger week and is pushed to "
+        "the following week, which concentrates the backlog and can overload "
+        "capacity.",
         f"Generation {gen}. So far the best strategy (genome) and its measured metrics:",
         f"  genome = {genome_json}",
         f"  metrics = {metrics_json}",
@@ -84,23 +97,43 @@ def _build_prompt(gen: int, best: dict, history: list) -> str:
         "PROPOSE exactly 3 candidate strategies to try next. Each is a JSON object "
         "with these keys:",
         '  method: "ilp" (exact, fewer clusters) or "greedy" (fast)',
-        "  C_max: integer 3..9 (max tasks per cluster/day)",
+        "  C_max: integer 3..9 (max tasks of ONE repair type per cluster/day)",
         "  advance_limit: integer 1..6 (max days a task may be advanced)",
         "  safety_margin: integer 1..6 (days kept above the critical level P_CRIT)",
         "  advance_prefer: float -2..2 (negative=prefer delay, positive=prefer advance)",
         "  w_reliability: the reliability (safety) penalty severity (1..20)",
-        "Reason about the trade-off: fewer clusters cut deployment cost but a task "
-        "delayed too far risks a reliability violation (the unit dropping below "
-        "P_CRIT); never allow a reliability violation. Make the 3 candidates "
-        "meaningfully DIFFERENT from each other. "
+        "Reason using the DOMAIN FACTS and the two constraints, not just the "
+        "numbers: a higher C_max absorbs the deferred backlog and the split "
+        "A/B clusters but costs more; a task delayed too far risks a reliability "
+        "violation (unit dropping below P_CRIT) -- never allow a violation. "
+        "Make the 3 candidates meaningfully DIFFERENT from each other. "
         "Return ONLY a JSON array of 3 objects, no prose, no markdown.",
     ]
     return "\n".join(lines)
 
 
-def propose(gen: int, best: dict, history: list, n: int = 3) -> list[Strategy]:
-    """Ask the LLM to propose `n` candidate strategies; return Strategy objects."""
-    out = _llm_call(_build_prompt(gen, best, history))
+def _domain_summary(tasks: "pd.DataFrame") -> dict:
+    """The domain facts the LLM actually reasons about (not blind number-tuning)."""
+    comp = tasks["repair_type"].value_counts().to_dict() if "repair_type" in tasks.columns else {}
+    deferred = int(tasks["deferred"].sum()) if "deferred" in tasks.columns else 0
+    return {
+        "n_tasks": len(tasks),
+        "repair_type_counts": {str(k): int(v) for k, v in comp.items()},
+        "n_deferred": deferred,
+        "max_same_type_per_day": int(tasks.groupby(["t_n", "repair_type"]).size().max())
+        if "repair_type" in tasks.columns else 0,
+    }
+
+
+def propose(gen: int, best: dict, history: list, n: int = 3,
+            domain: dict = None) -> list[Strategy]:
+    """Ask the LLM to propose `n` candidate strategies; return Strategy objects.
+    The LLM reasons about the DOMAIN facts (repair-type mix, deferred backlog,
+    cross-type/deferred constraints), not just the numbers."""
+    if domain is None:
+        # the caller should pass domain; fall back to an empty summary.
+        domain = {}
+    out = _llm_call(_build_prompt(gen, best, history, domain))
     genomes = _parse(out)
     if not genomes:
         return []

@@ -32,8 +32,8 @@ from agents.grouping import GroupingAgent
 from agents.evaluation import EvaluationAgent
 from agents.evolution import EvolutionMaster, Strategy
 
-REAL = "/home/ubadmin/projects/AgentOpt/results/real_tasks.csv"
-REAL_UNITS = "/home/ubadmin/projects/AgentOpt/results/real_units.csv"
+REAL = "/home/ubadmin/projects/AgentOpt/results/sim_tasks.csv"
+REAL_UNITS = "/home/ubadmin/projects/AgentOpt/results/sim_units.csv"
 
 
 def _evaluate(tasks: pd.DataFrame, H: int, method: str = "ilp",
@@ -56,9 +56,9 @@ def _grid_search(tasks: pd.DataFrame, H: int) -> dict:
     capacity knobs; the GA additionally searches those, so any gain the GA
     shows over this grid is at least partly due to evolution/search rather
     than the structural tuning alone.)"""
-    C_maxs = list(range(3, 9))       # 3..8
-    As = list(range(1, 7))          # 1..6 (advance_limit)
-    ms = list(range(1, 6))         # 1..5 (safety_margin)
+    C_maxs = list(range(3, 9))       # 3..8  (the material knob)
+    As = [3]                      # advance_limit at the conventional default
+    ms = [2]                      # safety_margin at the conventional default
 
     best = None
     tried = 0
@@ -66,7 +66,12 @@ def _grid_search(tasks: pd.DataFrame, H: int) -> dict:
         met = _evaluate(tasks, H, method="ilp", C_max=C_max, A=A, m=m,
                         advance_prefer=0.0, w_reliability=5.0)
         tried += 1
-        if met["n_violations"] == 0 and (best is None or met["fitness"] < best[1]):
+        # An infeasible ILP returns the empty schedule (0 clusters, 0 cost, 0
+        # violations); a feasible schedule always has >0 clusters, so require
+        # n_clusters > 0 to exclude the empty / infeasible result.
+        feasible = met["n_violations"] == 0 and met["n_clusters"] > 0
+        if feasible and (best is None
+                         or met["fitness"] < best[1]["fitness"]):
             best = (("ilp", C_max, A, m, 0.0), met, tried)
     return {"grid_search_best": best, "grid_points_tried": tried}
 

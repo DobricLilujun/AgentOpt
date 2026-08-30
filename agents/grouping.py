@@ -5,20 +5,30 @@ Turns a set of pressure-service tasks into a grouped schedule (which tasks run
 on which day) by minimising the number of deployment clusters, subject to
 operational constraints. Two strategies, selectable per generation:
 
-  - "ilp":    exact Integer Linear Programming (the core model,
-              constraints 1-10). Objective: minimise # activated clusters.
+  - "ilp":    exact Integer Linear Programming (the core model).
   - "greedy": fast sliding-window heuristic.
 
-A strategy can also add a small "advance-preference" penalty that biases tasks
-toward being brought FORWARD (earlier) rather than delayed -- this addresses
-the open point that the model has no advance/delay preference, and is one of
-the knobs the EvolutionMaster evolves.
-
-Implementation notes
+Constraints modelled
 ---------------------
-For speed in the multi-agent search, variables are built only over the feasible
-[a_n, b_n] window of each task (never the whole horizon), and the CBC solver
-runs with a time limit so a single generation never hangs.
+  A "cluster" is a group of tasks of a SINGLE repair type done in one
+  deployment.  Because the two repair types (A: repressurisation, B:
+  seal-replacement) require different technician specialities, a cluster is
+  identified by (day, repair_type): a day may carry at most one A-cluster and
+  one B-cluster.
+
+  (a) each task is scheduled exactly once, inside its feasible window;
+  (b) a (day, type) cluster is active only if it serves a task;
+  (c) CAPACITY: at most C_max tasks of one type may be done on one day;
+  (d) CROSS-TYPE is enforced structurally by keying clusters on (day, type):
+      two tasks of different types can never share a cluster;
+  (e) DEFERRED: a task whose log says "本周不建议维修该 unit" cannot be
+      scheduled in its trigger week and is pushed to the following week.
+  (f) a schedule with any reliability violation is penalised (see
+      EvaluationAgent).
+
+The number of clusters is therefore the deployment cost.  Because a day with
+both an A- and a B-task needs two clusters, the cross-type constraint makes the
+problem strictly harder than an untyped one -- which is exactly the point.
 """
 from __future__ import annotations
 
@@ -30,6 +40,8 @@ P_NOM = 3.5
 P_SERV = 3.2
 P_CRIT = 3.0
 SAFETY_MARGIN = 2  # conservative days before reaching the critical level P_CRIT
+WEEK = 7
+TYPES = ("A", "B")
 
 
 class GroupingAgent:
@@ -46,25 +58,28 @@ class GroupingAgent:
         self.cost_per_service = cost_per_service
         self.time_limit = time_limit
 
-    # ---- bounds (constraints 5-8) ---------------------------------
+    # ---- bounds (feasibility window of each task) -----------------------
     def _bounds(self, tasks: pd.DataFrame, H: int) -> pd.DataFrame:
         df = tasks.copy().reset_index().rename(columns={"index": "orig_idx"})
         A = self.advance_limit
         df["a_n"] = df["t_n"].clip(lower=0).apply(lambda x: max(0, x - A))
         days_to_critical = (P_SERV - P_CRIT) / df["alpha"].clip(lower=1e-6)
         df["b_n"] = np.minimum(H, df["t_n"] + days_to_critical - SAFETY_MARGIN).round().astype(int)
-        # cap the window to window_len days (a task may be delayed at most
-        # window_len days beyond its trigger) so the ILP stays tractable at
-        # large scale and no service is delayed unboundedly.
         df["b_n"] = np.maximum(df["b_n"], df["a_n"])
+        # (e) DEFERRED: a "本周不建议维修" task cannot be scheduled in its
+        #     trigger week; shift its window to start at the following week.
+        deferred = df.get("deferred")
+        if deferred is not None and bool(deferred.any()):
+            next_week = 7 * (df.loc[deferred, "t_n"] // WEEK + 1).astype(int)
+            df.loc[deferred, "a_n"] = np.maximum(df.loc[deferred, "a_n"],
+                                                next_week[deferred].values)
         if self.window_len:
             df["b_n"] = np.minimum(df["b_n"], df["a_n"] + self.window_len)
         df.loc[df["b_n"] < df["a_n"], "b_n"] = df.loc[df["b_n"] < df["a_n"], "a_n"]
-        # never let a window extend beyond the planning horizon
         df["b_n"] = np.minimum(df["b_n"], H)
         return df
 
-    # ---- ILP solver (core model + optional advance-preference penalty) --
+    # ---- ILP solver: clusters keyed on (day, repair_type) ---------------
     def _solve_ilp(self, tasks: pd.DataFrame, C_max: int, H: int) -> dict:
         df = self._bounds(tasks, H)
         prob = pulp.LpProblem("grouping", pulp.LpMinimize)
@@ -81,10 +96,16 @@ class GroupingAgent:
                 by_day.setdefault(d, []).append((r.tid, v))
                 vars_r.append(v)
             by_task[r.tid] = vars_r
-        y = {d: pulp.LpVariable(f"y_{d}", cat="Binary") for d in range(H + 1)}
 
-        # (1) objective: minimise activated clusters (+ optional advance penalty)
-        obj = pulp.lpSum(y[d] for d in range(H + 1))
+        # a (day, type) cluster is active only if it serves a task.
+        y = {}
+        for d in range(H + 1):
+            for rt in TYPES:
+                y[(d, rt)] = pulp.LpVariable(f"y_{d}_{rt}", cat="Binary")
+
+        # (1) objective: minimise the number of active (day, type) clusters
+        #     (+ optional advance-preference penalty).
+        obj = pulp.lpSum(y[(d, rt)] for d in range(H + 1) for rt in TYPES)
         if self.advance_prefer:
             obj = obj + self.advance_prefer * pulp.lpSum(
                 (int(r.t_n) - d) * x[(r.tid, d)]
@@ -92,55 +113,103 @@ class GroupingAgent:
                 for d in range(int(r.a_n), int(r.b_n) + 1))
         prob += obj
 
-        # (3) assign each task once
+        # (a) assign each task once
         for tid, vars_r in by_task.items():
             prob += pulp.lpSum(vars_r) == 1
-        # (2) theta <= cluster
+        # (b) task on day d activates the (d, type) cluster of its own type
+        for r in df.itertuples():
+            rt = getattr(r, "repair_type", "A")
+            for d in range(int(r.a_n), int(r.b_n) + 1):
+                prob += x[(r.tid, d)] <= y[(d, rt)]
+        # (c) CAPACITY: at most C_max tasks of one type on one day.
         for d, lst in by_day.items():
-            for (tid, v) in lst:
-                prob += v <= y[d]
-        # (4) capacity per cluster/day
-        for d, lst in by_day.items():
-            if len(lst) > C_max:
-                prob += pulp.lpSum(v for (_, v) in lst) <= C_max
+            for rt in TYPES:
+                same = [v for (tid, v) in lst
+                       if str(df.loc[tid, "repair_type"]) == rt]
+                if len(same) > C_max:
+                    prob += pulp.lpSum(same) <= C_max
 
         prob.solve(pulp.PULP_CBC_CMD(msg=0, timeLimit=self.time_limit))
+        # If the ILP is infeasible (e.g. C_max too small to fit a peak day)
+        # or could not be solved to completion in time, fall back to the
+        # greedy heuristic so we always return a FULL, feasible schedule.
+        # A "Not Solved" (timed-out) ILP may be a PARTIAL solution (only some
+        # tasks assigned -> a tiny cluster count); keeping it would let the
+        # optimiser "win" on an incomplete schedule, so we never accept it.
+        status = pulp.LpStatus[prob.status]
+        if status != "Optimal":
+            return self._solve_greedy(tasks, C_max, H)
+        # guard: even an "Optimal" result must assign every task; if CBC
+        # returned a degenerate optimum, fall back to the greedy heuristic.
+        assigned = sum(1 for v in x.values() if v is not None and v.value() and v.value() > 0.5)
+        if assigned < len(tasks):
+            return self._solve_greedy(tasks, C_max, H)
         assignment = {}
         for tid, vars_r in by_task.items():
             for d in range(0, H + 1):
                 v = x.get((tid, d))
                 if v is not None and v.value() and v.value() > 0.5:
                     assignment[tid] = d
-        active_days = [d for d in range(H + 1) if y[d].value() and y[d].value() > 0.5]
-        return {"method": "ILP", "status": pulp.LpStatus[prob.status],
-                "assignment": assignment, "active_days": active_days}
+        active_days = []
+        for d in range(H + 1):
+            for rt in TYPES:
+                if y[(d, rt)].value() and y[(d, rt)].value() > 0.5:
+                    active_days.append((d, rt))
+        # report as active (day,type) clusters but also the number of active
+        # calendar days, for the cluster count used by the evaluation agent.
+        return {"method": "ILP", "status": status,
+                "assignment": assignment,
+                "active_days": [d for d, rt in active_days],
+                "n_clusters": len(active_days)}
 
     # ---- greedy sliding-window heuristic -------------------------------
     def _solve_greedy(self, tasks: pd.DataFrame, C_max: int, H: int) -> dict:
         df = self._bounds(tasks, H).sort_values("t_n").reset_index(drop=True)
         assignment, clusters = {}, {}
 
-        def _place(tid, lo, hi):
-            # scan candidate days in the window; attach to a day with room.
+        def _place(tid, lo, hi, rtype):
+            # scan candidate days in the window; attach to a day that has room
+            # for this repair type (a day can hold one A-cluster + one B-cluster).
             order = list(range(lo, hi + 1))
             order = sorted(order, reverse=(self.advance_prefer > 0))
             for day in order:
-                if len(clusters.get(day, [])) < C_max:
-                    clusters.setdefault(day, []).append(tid)
+                same = clusters.get((day, rtype), [])
+                if len(same) < C_max:
+                    clusters[(day, rtype)] = same + [tid]
                     return day
-            # no day in the window has capacity -> open a new one at the
-            # preferred edge (still in-window, so it stays feasible)
+            # no same-type slot within the window for this task: open a NEW
+            # cluster at the preferred edge (still in-window, so it stays
+            # feasible) that is itself within C_max. NEVER overload a cluster
+            # beyond C_max -- doing so produced a physically-impossible count
+            # (e.g. 10 clusters for 378 tasks) that the optimiser could "win"
+            # on. If the preferred-edge day is full, open a fresh day just
+            # beyond it (kept inside the window's type cluster space).
             new_day = hi if self.advance_prefer > 0 else lo
-            clusters.setdefault(new_day, []).append(tid)
-            return new_day
+            existing = clusters.get((new_day, rtype), [])
+            if len(existing) < C_max:
+                clusters[(new_day, rtype)] = existing + [tid]
+                return new_day
+            # the preferred edge is full; find any in-window day with room,
+            # else open a fresh (day, type) cluster adjacent to the window.
+            for day in range(lo, hi + 1):
+                if len(clusters.get((day, rtype), [])) < C_max:
+                    clusters[(day, rtype)] = clusters.get((day, rtype), []) + [tid]
+                    return day
+            fresh = hi + 1 if self.advance_prefer > 0 else lo - 1
+            while 0 <= fresh <= H and len(clusters.get((fresh, rtype), [])) >= C_max:
+                fresh += 1 if self.advance_prefer > 0 else -1
+            clusters[(fresh, rtype)] = [tid]
+            return fresh
 
         for _, row in df.iterrows():
             tid = row.tid
-            day = _place(tid, int(row.a_n), int(row.b_n))
+            rtype = getattr(row, "repair_type", "A")
+            day = _place(tid, int(row.a_n), int(row.b_n), rtype)
             assignment[tid] = day
-        active_days = [d for d, t in clusters.items() if t]
+        active_days = [d for d, rt in clusters if clusters[(d, rt)]]
         return {"method": "Greedy", "status": "OK",
-                "assignment": assignment, "active_days": active_days}
+                "assignment": assignment, "active_days": active_days,
+                "n_clusters": len(active_days)}
 
     def group(self, tasks: pd.DataFrame, C_max: int = 5, H: int = 30) -> dict:
         if self.method == "greedy":

@@ -91,7 +91,7 @@ if __name__ == "__main__":
     import sys
     sys.path.insert(0, ".")
     from agents import GroupingAgent, EvaluationAgent
-    tasks = pd.read_csv("results/real_tasks.csv")
+    tasks = pd.read_csv("results/sim_tasks.csv")
     print(f"real tasks: {len(tasks)} (t_n {tasks['t_n'].min():.1f}..{tasks['t_n'].max():.1f})")
     H = int(tasks["t_n"].max()) + 3
 

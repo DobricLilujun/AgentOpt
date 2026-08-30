@@ -33,7 +33,7 @@ def run_llm(tasks: pd.DataFrame, generations: int = 10) -> dict:
 
 
 def main():
-    tasks = pd.read_csv(f"{OUT}/real_tasks.csv")
+    tasks = pd.read_csv(f"{OUT}/sim_tasks.csv")
 
     llm = run_llm(tasks, generations=10)
     b = llm["best_strategy"]

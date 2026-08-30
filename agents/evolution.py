@@ -63,8 +63,12 @@ class Strategy:
 
     def to_solvers(self):
         """Instantiate the GroupingAgent and EvaluationAgent for this strategy."""
+        # window_len=0 (no cap) on the (day, type) model: the window is
+        # [a_n, b_n] and no extra per-day cap is applied. The old window_len=10
+        # was a leftover from the pre-(day,type) model and could make the ILP
+        # infeasible (-> a degenerate greedy fallback that dropped tasks).
         g = GroupingAgent(method=self.method, advance_prefer=self.advance_prefer,
-                          window_len=10, advance_limit=self.advance_limit, cost_per_service=10)
+                          window_len=0, advance_limit=self.advance_limit, cost_per_service=10)
         e = EvaluationAgent(w_reliability=self.w_reliability,
                             advance_limit=self.advance_limit, safety_margin=self.safety_margin)
         return g, e
@@ -175,10 +179,15 @@ class EvolutionMaster:
             # --- produce next generation ---
             next_pop = [copy.deepcopy(best)]  # elitism
             # In LLM mode, ask the LLM brain to propose a BATCH of candidates
-            # this generation (one LLM call -> several strategies).
+            # this generation (one LLM call -> several strategies). The LLM
+            # reasons about DOMAIN facts (repair-type mix, deferred backlog, the
+            # cross-type / deferred constraints), not just the numbers.
             if self.mode == "llm" and self.llm_proposer is not None:
                 best_report = {"genome": best.genome(), "metrics": best.metrics}
-                llm_children = self.llm_proposer.propose(gen, best_report, self.history)
+                from agents.llm_proposer import _domain_summary
+                domain = _domain_summary(self.tasks)
+                llm_children = self.llm_proposer.propose(
+                    gen, best_report, self.history, domain=domain)
                 for child in llm_children:
                     next_pop.append(self._eval(child))
                 self.llm_calls = getattr(self, "llm_calls", 0) + 1

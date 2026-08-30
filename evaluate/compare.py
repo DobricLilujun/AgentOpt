@@ -20,10 +20,19 @@ from agents import EvolutionMaster, GroupingAgent, EvaluationAgent
 
 
 def baseline_no_grouping(tasks: pd.DataFrame, H: int) -> dict:
-    """Deploy every task at its original time (no grouping)."""
+    """Deploy every task at its original time (no grouping).
+
+    A cluster is a (day, repair_type) group (the same definition the grouping
+    agent and the ILP use), so that this baseline is directly comparable to
+    the ILP and the self-evolving result.  Without that correction the
+    baseline would count only the number of distinct *days* (ignoring the
+    A/B cross-type split) and look artificially better than the ILP.
+    """
     res = {"method": "No-grouping",
            "assignment": {t.tid: t.t_n for t in tasks.itertuples()},
            "active_days": sorted(set(tasks["t_n"].tolist()))}
+    # count (day, repair_type) clusters, consistent with the ILP
+    res["n_clusters"] = tasks.groupby(["t_n", "repair_type"]).ngroups
     e = EvaluationAgent()
     return e.evaluate(tasks, res, H=H)
 
@@ -45,7 +54,7 @@ def run_multi_agent(tasks: pd.DataFrame, H: int) -> dict:
 
 
 def main():
-    tasks = pd.read_csv("/home/ubadmin/projects/AgentOpt/results/real_tasks.csv")
+    tasks = pd.read_csv("/home/ubadmin/projects/AgentOpt/results/sim_tasks.csv")
     H = int(tasks["t_n"].max()) + 3  # derive horizon from the data
     print(f"Real tasks: {len(tasks)}  (horizon H={H})")
 

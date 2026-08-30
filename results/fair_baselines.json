@@ -1,0 +1,83 @@
+{
+  "B0_conventional_ilp": {
+    "method": "ILP",
+    "n_clusters": 77,
+    "n_tasks": 378,
+    "cost": 770,
+    "cost_base": 3780,
+    "cost_reduction": 0.7962962962962963,
+    "n_violations": 0,
+    "reliability": 1.0,
+    "advance": 105.0,
+    "delay": 254.0,
+    "fitness": 770.0
+  },
+  "B1_fixed_Cmax8_ilp": {
+    "method": "ILP",
+    "n_clusters": 49,
+    "n_tasks": 378,
+    "cost": 490,
+    "cost_base": 3780,
+    "cost_reduction": 0.8703703703703703,
+    "n_violations": 0,
+    "reliability": 1.0,
+    "advance": 63.0,
+    "delay": 293.0,
+    "fitness": 490.0
+  },
+  "B2_fixed_A4_m2_ilp": {
+    "method": "ILP",
+    "n_clusters": 77,
+    "n_tasks": 378,
+    "cost": 770,
+    "cost_base": 3780,
+    "cost_reduction": 0.7962962962962963,
+    "n_violations": 0,
+    "reliability": 1.0,
+    "advance": 125.0,
+    "delay": 239.0,
+    "fitness": 770.0
+  },
+  "B3_best_fixed_strategy": {
+    "method": "ILP",
+    "n_clusters": 50,
+    "n_tasks": 378,
+    "cost": 500,
+    "cost_base": 3780,
+    "cost_reduction": 0.8677248677248677,
+    "n_violations": 0,
+    "reliability": 1.0,
+    "advance": 82.0,
+    "delay": 278.0,
+    "fitness": 500.0
+  },
+  "B3_grid_points": 6,
+  "B3_grid_best_genome": [
+    "ilp",
+    8,
+    3,
+    2,
+    0.0
+  ],
+  "B4_agentopt_evolved": {
+    "method": "ILP",
+    "n_clusters": 49,
+    "n_tasks": 378,
+    "cost": 490,
+    "cost_base": 3780,
+    "cost_reduction": 0.8703703703703703,
+    "n_violations": 0,
+    "reliability": 1.0,
+    "advance": 49.0,
+    "delay": 318.0,
+    "fitness": 490.0
+  },
+  "B4_genome": {
+    "method": "ilp",
+    "C_max": 8,
+    "advance_limit": 4,
+    "safety_margin": 2,
+    "advance_prefer": 0.0,
+    "w_reliability": 5.0
+  }
+}

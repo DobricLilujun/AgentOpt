@@ -61,14 +61,25 @@ class EvaluationAgent:
         df["scheduled_day"] = df["tid"].map(result["assignment"])
 
         n_tasks = len(df)
-        n_clusters = len({d for d in result["active_days"] if d is not None})
+        # a cluster is a (day, repair_type) group; the grouping agent reports
+        # this as n_clusters (a day with both an A- and a B-task is 2 clusters).
+        n_clusters = result.get("n_clusters",
+                                len({d for d in result["active_days"]
+                                     if d is not None}))
 
         # cost = cost_per_service * clusters
         cost = n_clusters * self.cost_per_service
         cost_base = n_tasks * self.cost_per_service
 
-        # reliability: a violation is a task scheduled past its latest feasible day
+        # reliability: a violation is a task scheduled past its latest feasible day,
+        # OR a task that was never scheduled at all (dropped -> the unit is
+        # never serviced -> it will certainly fall below P_CRIT). Counting
+        # dropped tasks as violations is what keeps the optimiser from
+        # "winning" by dropping tasks (which would yield a tiny,
+        # physically-impossible cluster count).
         df["violation"] = df["scheduled_day"] > df["b_n"] + 1e-6
+        df["unassigned"] = df["scheduled_day"].isna()
+        df["violation"] = df["violation"] | df["unassigned"]
         n_violations = int(df["violation"].sum())
         reliability = 1.0 - n_violations / max(n_tasks, 1)
         reliability_penalty = float(n_violations)  # hard penalty
@@ -80,12 +91,14 @@ class EvaluationAgent:
 
         # fitness (lower is better).
         # Reliability is a HARD safety requirement, not a tunable trade-off:
-        # a schedule with any violation is penalised heavily (near-disqualifying)
-        # so the optimiser never accepts a cheaper-but-unsafe schedule.
-        # With 0 violations (the normal case) the fitness is just the deployment
-        # cost, so minimising clusters == minimising cost.
-        fitness = (cost
-                   + self.w_reliability * reliability_penalty * 1e5)
+        # a schedule with ANY violation is treated as disqualified (fitness ->
+        # infinity) so the optimiser never accepts a cheaper-but-unsafe
+        # schedule. With 0 violations (the normal case) the fitness is just
+        # the deployment cost, so minimising clusters == minimising cost.
+        if n_violations > 0:
+            fitness = float("inf")
+        else:
+            fitness = cost
         return {
             "method": result.get("method", "?"),
             "n_clusters": n_clusters,

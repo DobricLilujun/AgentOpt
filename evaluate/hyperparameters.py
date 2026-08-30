@@ -18,7 +18,7 @@ sys.path.insert(0, ".")
 import pandas as pd
 from agents import GroupingAgent, EvaluationAgent, EvolutionMaster
 
-REAL = "results/real_tasks.csv"
+REAL = "results/sim_tasks.csv"
 
 
 def _H() -> int:
