@@ -2,83 +2,101 @@
   "H1_population": {
     "4": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 65,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 650,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.828042328042328,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 307.0,
+      "delay": 62.0,
+      "advance_days": 783.0,
+      "delay_days": 232.0,
+      "shift_penalty": 97.15,
+      "fitness": 747.15
     },
     "6": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 90,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 900,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.7619047619047619,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 283.0,
+      "delay": 71.0,
+      "advance_days": 500.0,
+      "delay_days": 240.0,
+      "shift_penalty": 85.0,
+      "fitness": 985.0
     },
     "8": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 59,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 590,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.843915343915344,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 313.0,
+      "delay": 62.0,
+      "advance_days": 1376.0,
+      "delay_days": 226.0,
+      "shift_penalty": 125.3,
+      "fitness": 715.3
     },
     "10": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 71,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 710,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.8121693121693122,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 271.0,
+      "delay": 70.0,
+      "advance_days": 451.0,
+      "delay_days": 243.0,
+      "shift_penalty": 83.3,
+      "fitness": 793.3
     }
   },
   "H2_generations": {
     "4": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 81,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 810,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.7857142857142857,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 312.0,
+      "delay": 62.0,
+      "advance_days": 826.0,
+      "delay_days": 222.0,
+      "shift_penalty": 96.80000000000001,
+      "fitness": 906.8
     },
     "8": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 88,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 880,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.7671957671957672,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 295.0,
+      "delay": 65.0,
+      "advance_days": 527.0,
+      "delay_days": 226.0,
+      "shift_penalty": 82.85,
+      "fitness": 962.85
     },
     "12": {
       "method": "ILP",
@@ -89,37 +107,46 @@
       "cost_reduction": 0.8703703703703703,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 234.0,
+      "delay": 106.0,
+      "advance_days": 393.0,
+      "delay_days": 425.0,
+      "shift_penalty": 125.9,
+      "fitness": 615.9
     },
     "16": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 88,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 880,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.7671957671957672,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 293.0,
+      "delay": 69.0,
+      "advance_days": 531.0,
+      "delay_days": 230.0,
+      "shift_penalty": 84.05,
+      "fitness": 964.05
     }
   },
   "H3_capacity": {
     "3": {
       "method": "Greedy",
-      "n_clusters": 119,
+      "n_clusters": 120,
       "n_tasks": 378,
-      "cost": 1190,
+      "cost": 1200,
       "cost_base": 3780,
-      "cost_reduction": 0.6851851851851851,
+      "cost_reduction": 0.6825396825396826,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 88.0,
-      "delay": 272.0,
-      "fitness": 1190.0
+      "advance": 90.0,
+      "delay": 270.0,
+      "advance_days": 1401.0,
+      "delay_days": 1309.0,
+      "shift_penalty": 397.3,
+      "fitness": 1597.3
     },
     "5": {
       "method": "ILP",
@@ -132,7 +159,10 @@
       "reliability": 1.0,
       "advance": 105.0,
       "delay": 254.0,
-      "fitness": 770.0
+      "advance_days": 212.0,
+      "delay_days": 1362.0,
+      "shift_penalty": 351.1,
+      "fitness": 1121.1
     },
     "7": {
       "method": "ILP",
@@ -145,7 +175,10 @@
       "reliability": 1.0,
       "advance": 92.0,
       "delay": 264.0,
-      "fitness": 550.0
+      "advance_days": 203.0,
+      "delay_days": 1489.0,
+      "shift_penalty": 382.4,
+      "fitness": 932.4
     },
     "8": {
       "method": "ILP",
@@ -158,7 +191,10 @@
       "reliability": 1.0,
       "advance": 63.0,
       "delay": 293.0,
-      "fitness": 490.0
+      "advance_days": 135.0,
+      "delay_days": 1457.0,
+      "shift_penalty": 371.0,
+      "fitness": 861.0
     }
   },
   "H4_advance_limit": {
@@ -173,7 +209,10 @@
       "reliability": 1.0,
       "advance": 32.0,
       "delay": 313.0,
-      "fitness": 770.0
+      "advance_days": 32.0,
+      "delay_days": 2036.0,
+      "shift_penalty": 510.6,
+      "fitness": 1280.6
     },
     "3": {
       "method": "ILP",
@@ -186,7 +225,10 @@
       "reliability": 1.0,
       "advance": 105.0,
       "delay": 254.0,
-      "fitness": 770.0
+      "advance_days": 212.0,
+      "delay_days": 1362.0,
+      "shift_penalty": 351.1,
+      "fitness": 1121.1
     },
     "6": {
       "method": "ILP",
@@ -199,7 +241,10 @@
       "reliability": 1.0,
       "advance": 171.0,
       "delay": 183.0,
-      "fitness": 760.0
+      "advance_days": 656.0,
+      "delay_days": 834.0,
+      "shift_penalty": 241.3,
+      "fitness": 1001.3
     }
   },
   "H5_safety_margin": {
@@ -214,7 +259,10 @@
       "reliability": 1.0,
       "advance": 105.0,
       "delay": 254.0,
-      "fitness": 770.0
+      "advance_days": 212.0,
+      "delay_days": 1362.0,
+      "shift_penalty": 351.1,
+      "fitness": 1121.1
     },
     "2": {
       "method": "ILP",
@@ -227,7 +275,10 @@
       "reliability": 1.0,
       "advance": 105.0,
       "delay": 254.0,
-      "fitness": 770.0
+      "advance_days": 212.0,
+      "delay_days": 1362.0,
+      "shift_penalty": 351.1,
+      "fitness": 1121.1
     },
     "4": {
       "method": "ILP",
@@ -240,48 +291,60 @@
       "reliability": 0.9973544973544973,
       "advance": 105.0,
       "delay": 254.0,
-      "fitness": 500770.0
+      "advance_days": 212.0,
+      "delay_days": 1362.0,
+      "shift_penalty": 351.1,
+      "fitness": Infinity
     }
   },
   "H6_objective_weights": {
     "relaxed safety": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 56,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 560,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.8518518518518519,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 261.0,
+      "delay": 82.0,
+      "advance_days": 436.0,
+      "delay_days": 262.0,
+      "shift_penalty": 87.3,
+      "fitness": 647.3
     },
     "strict safety (default)": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 60,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 600,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.8412698412698413,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 247.0,
+      "delay": 81.0,
+      "advance_days": 408.0,
+      "delay_days": 280.0,
+      "shift_penalty": 90.4,
+      "fitness": 690.4
     },
     "strict safety (max)": {
       "method": "ILP",
-      "n_clusters": 49,
+      "n_clusters": 56,
       "n_tasks": 378,
-      "cost": 490,
+      "cost": 560,
       "cost_base": 3780,
-      "cost_reduction": 0.8703703703703703,
+      "cost_reduction": 0.8518518518518519,
       "n_violations": 0,
       "reliability": 1.0,
-      "advance": 49.0,
-      "delay": 318.0,
-      "fitness": 490.0
+      "advance": 300.0,
+      "delay": 70.0,
+      "advance_days": 724.0,
+      "delay_days": 244.0,
+      "shift_penalty": 97.2,
+      "fitness": 657.2
     }
   }
 }

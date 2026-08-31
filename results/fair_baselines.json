@@ -10,7 +10,10 @@
     "reliability": 1.0,
     "advance": 105.0,
     "delay": 254.0,
-    "fitness": 770.0
+    "advance_days": 212.0,
+    "delay_days": 1362.0,
+    "shift_penalty": 351.1,
+    "fitness": 1121.1
   },
   "B1_fixed_Cmax8_ilp": {
     "method": "ILP",
@@ -23,7 +26,10 @@
     "reliability": 1.0,
     "advance": 63.0,
     "delay": 293.0,
-    "fitness": 490.0
+    "advance_days": 135.0,
+    "delay_days": 1457.0,
+    "shift_penalty": 371.0,
+    "fitness": 861.0
   },
   "B2_fixed_A4_m2_ilp": {
     "method": "ILP",
@@ -36,20 +42,26 @@
     "reliability": 1.0,
     "advance": 125.0,
     "delay": 239.0,
-    "fitness": 770.0
+    "advance_days": 321.0,
+    "delay_days": 1251.0,
+    "shift_penalty": 328.8,
+    "fitness": 1098.8
   },
   "B3_best_fixed_strategy": {
     "method": "ILP",
-    "n_clusters": 50,
+    "n_clusters": 49,
     "n_tasks": 378,
-    "cost": 500,
+    "cost": 490,
     "cost_base": 3780,
-    "cost_reduction": 0.8677248677248677,
+    "cost_reduction": 0.8703703703703703,
     "n_violations": 0,
     "reliability": 1.0,
-    "advance": 82.0,
-    "delay": 278.0,
-    "fitness": 500.0
+    "advance": 63.0,
+    "delay": 293.0,
+    "advance_days": 135.0,
+    "delay_days": 1457.0,
+    "shift_penalty": 371.0,
+    "fitness": 861.0
   },
   "B3_grid_points": 6,
   "B3_grid_best_genome": [
@@ -61,23 +73,26 @@
   ],
   "B4_agentopt_evolved": {
     "method": "ILP",
-    "n_clusters": 49,
+    "n_clusters": 74,
     "n_tasks": 378,
-    "cost": 490,
+    "cost": 740,
     "cost_base": 3780,
-    "cost_reduction": 0.8703703703703703,
+    "cost_reduction": 0.8042328042328042,
     "n_violations": 0,
     "reliability": 1.0,
-    "advance": 49.0,
-    "delay": 318.0,
-    "fitness": 490.0
+    "advance": 284.0,
+    "delay": 64.0,
+    "advance_days": 493.0,
+    "delay_days": 225.0,
+    "shift_penalty": 80.9,
+    "fitness": 820.9
   },
   "B4_genome": {
     "method": "ilp",
     "C_max": 8,
-    "advance_limit": 4,
-    "safety_margin": 2,
-    "advance_prefer": 0.0,
-    "w_reliability": 5.0
+    "advance_limit": 2,
+    "safety_margin": 3,
+    "advance_prefer": -0.32066402541482775,
+    "w_reliability": 6.513841708684016
   }
 }
